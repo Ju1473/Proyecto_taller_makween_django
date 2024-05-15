@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>CarServ - Car Repair HTML Template</title>
+    <title>Inicio - Taller Rayo Makween</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -15,7 +15,8 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700&family=Ubuntu:wght@400;500&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700&family=Ubuntu:wght@400;500&display=swap"
+        rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -35,7 +36,8 @@
 
 <body>
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
@@ -44,40 +46,37 @@
 
 
     <!-- Topbar Start -->
-    <div class="container-fluid bg-light p-0">
-        <div class="row gx-0 d-none d-lg-flex">
-            <div class="col-lg-7 px-5 text-start">
-                <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                    <small class="fa fa-map-marker-alt text-primary me-2"></small>
-                    <small>123 Street, New York, USA</small>
-                </div>
-                <div class="h-100 d-inline-flex align-items-center py-3">
-                    <small class="far fa-clock text-primary me-2"></small>
-                    <small>Mon - Fri : 09.00 AM - 09.00 PM</small>
-                </div>
-            </div>
-            <div class="col-lg-5 px-5 text-end">
-                <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                    <small class="fa fa-phone-alt text-primary me-2"></small>
-                    <small>+012 345 6789</small>
-                </div>
-                <div class="h-100 d-inline-flex align-items-center">
-                    <a class="btn btn-sm-square bg-white text-primary me-1" href=""><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-sm-square bg-white text-primary me-1" href=""><i class="fab fa-twitter"></i></a>
-                    <a class="btn btn-sm-square bg-white text-primary me-1" href=""><i class="fab fa-linkedin-in"></i></a>
-                    <a class="btn btn-sm-square bg-white text-primary me-0" href=""><i class="fab fa-instagram"></i></a>
+    {% if user.is_authenticated %}
+        <div class="container-fluid bg-light p-0">
+            <div class="row gx-0 d-none d-lg-flex">
+                <div class="col-lg-7 px-5 text-start">
+                    <div class="h-100 d-inline-flex align-items-center py-3 me-4">
+                        {% for group in user.groups.all %}
+                            {% if group.name == 'Mecánico' %}
+                                <small class="bi bi-person-fill-gear me-2"></small>
+                                <small>Bienvenido/a Mecánico: {{ user.username }}</small>
+                            {% endif %}
+                        {% endfor %}
+                        {% if user.is_staff %}
+                            <small class="bi bi-person-fill-gear me-2"></small>
+                            <small>Bienvenido/a Administrador: {{ user.username }}</small>
+                        {% else %}
+                            <small class="bi bi-person-fill me-2"></small>
+                            <small>Bienvenido/a: {{ user.first_name }} {{ user.last_name }}</small>
+                        {% endif %}
+                        
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
     <!-- Topbar End -->
 
 
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
         <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <img class="img-fluid" src="{% static 'core/inicio/img/logo.png' %}" alt="" width="25" height="25">
-            <h2 class="m-0 text-primary"><i class="fa fa-car me-3"></i>CarServ</h2>
+            <h2 class="m-0 text-primary"><i class="fa fa-car me-3"></i>Taller Rayo Makween</h2>
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -98,15 +97,36 @@
                     </div>
                 </div>
                 <a href="{% url 'contacto' %}" class="nav-item nav-link">Contacto</a>
+                {% if user.is_authenticated %}
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Portal usuario</a>
+                        <div class="dropdown-menu fade-up m-0">
+                            {% if user.is_staff %}
+                                <a href="{% url 'mecanicos' %}" class="dropdown-item">Portal Mecánicos</a>
+                            {% endif %}
+                            {% for group in user.groups.all %}
+                                {% if group.name == 'Mecánico' %}
+                                    <a href="{% url 'mecanicos' %}" class="dropdown-item">Portal Mecánicos</a>
+                                {% endif %}
+                            {% endfor %}
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Cerrar sesión" class="dropdown-item">
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                <a href="{% url 'login' %}" class="nav-item nav-link">Iniciar Sesión<i
+                        class="fa fa-arrow-right ms-3"></i></a>
+                {% endif %}
             </div>
-            <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Inicio de Sesion<i class="fa fa-arrow-right ms-3"></i></a>
         </div>
     </nav>
     <!-- Navbar End -->
 
     <!-- INICIO CONTENIDO -->
     {% block contenido %}
-    
+
     {% endblock%}
     <!-- FIN CONTENIDO -->
 
@@ -146,7 +166,8 @@
                     <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
                     <div class="position-relative mx-auto" style="max-width: 400px;">
                         <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                        <button type="button"
+                            class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
                     </div>
                 </div>
             </div>
@@ -155,19 +176,9 @@
             <div class="copyright">
                 <div class="row">
                     <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
-
                         <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                        Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
-                        <br>Distributed By: <a class="border-bottom" href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                    </div>
-                    <div class="col-md-6 text-center text-md-end">
-                        <div class="footer-menu">
-                            <a href="">Home</a>
-                            <a href="">Cookies</a>
-                            <a href="">Help</a>
-                            <a href="">FQAs</a>
-                        </div>
+                        Desarrollado por Estudiantes de Ingeniería en Informática Duoc UC - 2024
+                        <br>Distribuido para: Taller Rayo Makween, Todos los derechos reservados
                     </div>
                 </div>
             </div>

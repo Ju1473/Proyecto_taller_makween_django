@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-
+from django.core.validators import RegexValidator
 # Create your models here.
 
 class TipoServicio(models.Model):
@@ -17,7 +17,7 @@ class Mecanico(models.Model):
     cant_mantenciones_mec = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.nombre_mecanico + self.apellido_mecanico
+        return self.nombre_mecanico + ' ' + self.apellido_mecanico
 
 class Trabajo(models.Model):
     nombre_trabajo = models.CharField(max_length=50)
@@ -62,7 +62,7 @@ class Cliente(models.Model):
     cant_mantenciones_cli = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.nombre_cliente + self.apellido_cliente
+        return self.nombre_cliente + ' ' + self.apellido_cliente
 
 class TipoConsulta(models.Model):
     descripcion = models.CharField(max_length=40)
@@ -73,9 +73,9 @@ class TipoConsulta(models.Model):
 class Contacto(models.Model):
     nombre_apellido = models.CharField(max_length=100)
     email_contacto = models.CharField(max_length=20)
-    telefono = models.CharField(max_length=9)
+    telefono = models.CharField(max_length=9,validators=[RegexValidator(r'^\d{9}$', 'El número de teléfono debe tener 9 dígitos numéricos.')])
     consulta = models.ForeignKey(TipoConsulta, on_delete=models.CASCADE)
-    info_adicional = models.CharField(max_length=200)
+    info_adicional = models.TextField()
 
     def __str__(self):
         return self.nombre_apellido
