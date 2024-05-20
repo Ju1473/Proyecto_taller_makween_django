@@ -8,12 +8,25 @@ class MecanicoForm(ModelForm):
     class Meta:
         model = Mecanico
         fields = ['nombre_mecanico', 'apellido_mecanico', 'correo_mecanico', 'password_mecanico']
+        labels = {
+            'nombre_mecanico': 'Nombre',
+            'apellido_mecanico': 'Apellido',
+            'correo_mecanico': 'Correo electrónico',
+            'password_mecanico': 'Contraseña',
+        }
 
 class TrabajoForm(ModelForm):
 
     class Meta:
         model = Trabajo
         fields = ['nombre_trabajo', 'diagnostico', 'mecanico', 'materiales', 'foto', 'servicio']
+        labels = {
+            'nombre_trabajo': 'Nombre del trabajo',
+            'diagnostico': 'Diagnóstico del trabajo',
+            'mecanico': 'Mecánico responsable',
+            'materiales': 'Materiales usados',
+            'servicio': 'Tipo de Servicio',
+        }
 
 class ClienteForm(ModelForm):
     
@@ -40,4 +53,19 @@ class ContactoForm(ModelForm):
         fields = ['nombre_apellido','email_contacto','telefono','consulta','info_adicional']
         labels = {
             'info_adicional': 'Informacion Adicional',
+        }
+
+class TrabajoAdminForm(ModelForm):
+
+    class Meta:
+        model = Trabajo
+        fields = ['nombre_trabajo', 'diagnostico', 'mecanico', 'materiales', 'foto', 'servicio', 'estado_publicacion', 'comentario_admin']
+        labels = {
+            'nombre_trabajo': 'Nombre del trabajo',
+            'diagnostico': 'Descripción del diagnóstico',
+            'mecanico': 'Mecánico responsable',
+            'materiales': 'Materiales usados',
+            'servicio': 'Tipo de Servicio',
+            'estado_publicacion' : 'Estado de publicación',
+            'comentario_admin' : 'Comentario'
         }

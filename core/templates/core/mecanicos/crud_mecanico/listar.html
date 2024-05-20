@@ -12,18 +12,25 @@
         
         <div class="flex-grow">
             <h6 class="preview-subject">{{ aux.nombre_mecanico }} {{ aux.apellido_mecanico}}</h6>
-            <p class="text-muted mb-0">{{ aux.correo_mecanico }}</p>
-            <br>
-            <p class="text-muted mb-0">Cantidad de mantenciones: {{ aux.cant_mantenciones_mec }}</p>
+            <p class="text-muted mb-0">Email: {{ aux.correo_mecanico }}</p>
+            <p class="text-muted mb-2 my-2">Cantidad de mantenciones: {{ aux.cant_mantenciones_mec }}</p>
         </div>
+        {% if user.is_staff %}
         <div class="mr-auto text-sm-right pt-2 pt-sm-0">
-            <input class="btn btn-warning" type="reset" value="Modificar">
-            <input class="btn btn-danger" type="submit" value="Eliminar">
-            <br>
+            <a href="{% url 'mecanicoupdate' aux.id %}" class="btn btn-warning">Modificar</a>
+            <a onclick="confirmarDelete({{ aux.id }})" class="btn btn-danger">Eliminar</a>
         </div>
-        
+        {% endif %}
     </div>
 </div>
 <br>
 {% endfor %}
+{% endblock %}
+
+{% block js %}
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'core/js/funciones.js' %}"></script>
+
 {% endblock %}

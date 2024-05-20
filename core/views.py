@@ -4,6 +4,7 @@ from .forms import *
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
+#from django.contrib import messages
 # Create your views here.
 
 def index(request):
@@ -11,6 +12,9 @@ def index(request):
 
 def nosotros(request):
     return render(request, 'core/nosotros.html')
+
+def servicios(request):
+    return render(request, 'core/servicios.html')
 
 def contacto(request):
     aux = {
@@ -56,9 +60,11 @@ def register(request):
             user = formulario.save()
             group = Group.objects.get(name="Cliente")
             user.groups.add(group)
+            #messages.success(request, 'Usuario creado correctamente!')
             return redirect(to="index")
         else:
             aux['form'] = formulario
+            #messages.error(request, 'No se pudo almacenar')
 
     return render(request, 'registration/register.html', aux)
 
@@ -72,7 +78,11 @@ def mecanicos(request):
     return render(request, 'core/mecanicos/crud_mecanico/listar.html', aux)
 
 def galeria(request):
-    return render(request, 'core/galeria.html')
+    trabajos = Trabajo.objects.all()
+    aux = {
+        'lista' : trabajos
+    }
+    return render(request, 'core/galeria.html',aux)
 
 def not_found(request):
     return render(request, 'core/404.html')
@@ -99,11 +109,11 @@ def mecanicoadd(request):
 def mecanicoupdate(request, id):
     mecanico = Mecanico.objects.get(id=id)
     aux = {
-        'form' : MecanicoForm(data=request.POST, instance=mecanico)
+        'form' : MecanicoForm(instance=mecanico)
     }
 
     if request.method == 'POST':
-        formulario = MecanicoForm(data=request.POST)
+        formulario = MecanicoForm(data=request.POST, instance=mecanico)
         if formulario.is_valid():
             formulario.save()
             aux['form'] = formulario
@@ -146,3 +156,37 @@ def trabajos(request):
     }
 
     return render(request, 'core/mecanicos/crud_proyecto/listar.html', aux)
+
+@permission_required('core.change_trabajo')
+def trabajoupdate(request, id):
+    trabajos = Trabajo.objects.get(id=id)
+    aux = {
+        'form' : TrabajoAdminForm(instance=trabajos)
+    }
+
+    if request.method == 'POST':
+        formulario = TrabajoAdminForm(data=request.POST, instance=trabajos)
+        if formulario.is_valid():
+            formulario.save()
+            aux['form'] = formulario
+            aux['msj'] = 'Trabajo aplicado correctamente!'
+        else:
+            aux['form'] = formulario
+            aux['msj'] = 'No se pudo aplicar el estado de trabajo!'
+
+    return render(request, 'core/mecanicos/crud_proyecto/update.html', aux)
+
+def trabajo(request, id):
+    trabajo = Trabajo.objects.get(id=id,estado_publicacion='A')
+    aux = {
+        'lista' : trabajo
+    }
+    return render(request, 'core/trabajo.html', aux)
+
+def listarconsultas(request):
+    consultas = Contacto.objects.all()
+    aux = {
+        'lista' : consultas
+    }
+
+    return render(request, 'core/mecanicos/consultas.html', aux)

@@ -39,7 +39,7 @@
     <div id="spinner"
         class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
+            <span class="sr-only">Cargando...</span>
         </div>
     </div>
     <!-- Spinner End -->
@@ -51,12 +51,6 @@
             <div class="row gx-0 d-none d-lg-flex">
                 <div class="col-lg-7 px-5 text-start">
                     <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                        {% for group in user.groups.all %}
-                            {% if group.name == 'Mecánico' %}
-                                <small class="bi bi-person-fill-gear me-2"></small>
-                                <small>Bienvenido/a Mecánico: {{ user.username }}</small>
-                            {% endif %}
-                        {% endfor %}
                         {% if user.is_staff %}
                             <small class="bi bi-person-fill-gear me-2"></small>
                             <small>Bienvenido/a Administrador: {{ user.username }}</small>
@@ -85,15 +79,15 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{% url 'index' %}" class="nav-item nav-link">Inicio</a>
                 <a href="{% url 'nosotros' %}" class="nav-item nav-link">Nosotros</a>
-                <a href="service.html" class="nav-item nav-link">Services</a>
+                <a href="{% url 'servicios' %}" class="nav-item nav-link">Servicios</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Páginas</a>
                     <div class="dropdown-menu fade-up m-0">
                         <a href="{% url 'galeria' %}" class="dropdown-item">Galeria</a>
-                        <a href="booking.html" class="dropdown-item">Booking</a>
-                        <a href="team.html" class="dropdown-item">Technicians</a>
-                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="{% url '404' %}" class="dropdown-item">Pagina 404</a>
+                        <a href="booking.html" class="dropdown-item">Reserva</a>
+                        <a href="team.html" class="dropdown-item">Técnicos</a>
+                        <a href="testimonial.html" class="dropdown-item">Comentarios</a>
+                        <a href="{% url '404' %}" class="dropdown-item">Página 404</a>
                     </div>
                 </div>
                 <a href="{% url 'contacto' %}" class="nav-item nav-link">Contacto</a>
@@ -135,7 +129,7 @@
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Address</h4>
+                    <h4 class="text-light mb-4">Dirección</h4>
                     <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
                     <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
                     <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
@@ -147,27 +141,27 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Opening Hours</h4>
-                    <h6 class="text-light">Monday - Friday:</h6>
+                    <h4 class="text-light mb-4">Horario de apertura</h4>
+                    <h6 class="text-light">Lunes - Viernes:</h6>
                     <p class="mb-4">09.00 AM - 09.00 PM</p>
-                    <h6 class="text-light">Saturday - Sunday:</h6>
+                    <h6 class="text-light">Sabádos - Domingos:</h6>
                     <p class="mb-0">09.00 AM - 12.00 PM</p>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Services</h4>
-                    <a class="btn btn-link" href="">Diagnostic Test</a>
-                    <a class="btn btn-link" href="">Engine Servicing</a>
-                    <a class="btn btn-link" href="">Tires Replacement</a>
-                    <a class="btn btn-link" href="">Oil Changing</a>
-                    <a class="btn btn-link" href="">Vacuam Cleaning</a>
+                    <h4 class="text-light mb-4">Servicios</h4>
+                    <a class="btn btn-link" href="">Prueba de diagnóstico</a>
+                    <a class="btn btn-link" href="">Servicio de motor</a>
+                    <a class="btn btn-link" href="">Cambios de neumáticos</a>
+                    <a class="btn btn-link" href="">Cambio de aceite</a>
+                    <a class="btn btn-link" href="">Limpieza de aspiración</a>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Newsletter</h4>
+                    <h4 class="text-light mb-4">Boletín informativo</h4>
                     <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
                     <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
+                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Tú email">
                         <button type="button"
-                            class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                            class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Inscribirse</button>
                     </div>
                 </div>
             </div>
@@ -205,6 +199,8 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'core/inicio/js/main.js' %}"></script>
+    <script src="{% static 'core/js/funciones.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

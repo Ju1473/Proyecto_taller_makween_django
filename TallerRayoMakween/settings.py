@@ -56,6 +56,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+# CONFIGURACIÓN DE MENSAJES
+#MESSAGE_STORAGE = "django.contrib.message.storage.cookie.CookieStorage"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

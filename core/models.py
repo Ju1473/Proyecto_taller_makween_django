@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django import forms
 # Create your models here.
 
 class TipoServicio(models.Model):
