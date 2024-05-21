@@ -20,6 +20,9 @@ class Mecanico(models.Model):
     def __str__(self):
         return self.nombre_mecanico + ' ' + self.apellido_mecanico
     
+    def calcular_cantidad_trabajos(self):
+        return Trabajo.objects.filter(mecanico=self).count()
+    
 class Cliente(models.Model):
     nombre_cliente = models.CharField(max_length=50)
     apellido_cliente = models.CharField(max_length=50)
@@ -27,7 +30,10 @@ class Cliente(models.Model):
     cant_mantenciones_cli = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.nombre_cliente + ' ' + self.apellido_cliente    
+        return self.nombre_cliente + ' ' + self.apellido_cliente
+    
+    def calcular_cantidad_trabajos(self):
+        return Trabajo.objects.filter(cliente=self).count()
 
 class Trabajo(models.Model):
     nombre_trabajo = models.CharField(max_length=50)

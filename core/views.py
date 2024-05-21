@@ -53,6 +53,7 @@ def register(request):
     aux = {
         'form' : CustomUserCreationForm()
     }
+    cliente = Cliente()
 
     if request.method == 'POST':
         formulario = CustomUserCreationForm(request.POST)
@@ -60,6 +61,10 @@ def register(request):
             user = formulario.save()
             group = Group.objects.get(name="Cliente")
             user.groups.add(group)
+            cliente.nombre_cliente = user.first_name
+            cliente.apellido_cliente = user.last_name
+            cliente.correo_cliente = user.email
+            cliente.save()
             #messages.success(request, 'Usuario creado correctamente!')
             return redirect(to="index")
         else:
@@ -71,10 +76,11 @@ def register(request):
 @login_required
 def mecanicos(request):
     mecanicos = Mecanico.objects.all()
+    for mec in mecanicos:
+        mec.cant_mantenciones_mec = mec.calcular_cantidad_trabajos()
     aux = {
         'lista' : mecanicos
     }
-
     return render(request, 'core/mecanicos/crud_mecanico/listar.html', aux)
 
 def galeria(request):
