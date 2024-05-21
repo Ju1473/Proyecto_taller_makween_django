@@ -59,7 +59,6 @@ class Cliente(models.Model):
     nombre_cliente = models.CharField(max_length=50)
     apellido_cliente = models.CharField(max_length=50)
     correo_cliente = models.CharField(max_length=50)
-    password_cliente = models.CharField(max_length=50)
     cant_mantenciones_cli = models.IntegerField(default=0)
 
     def __str__(self):

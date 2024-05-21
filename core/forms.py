@@ -32,7 +32,7 @@ class ClienteForm(ModelForm):
     
     class Meta:
         model = Cliente
-        fields = ['nombre_cliente', 'apellido_cliente', 'correo_cliente', 'password_cliente']
+        fields = ['nombre_cliente', 'apellido_cliente', 'correo_cliente']
 
 class CustomUserCreationForm(UserCreationForm):
 
