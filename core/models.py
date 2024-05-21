@@ -19,6 +19,15 @@ class Mecanico(models.Model):
 
     def __str__(self):
         return self.nombre_mecanico + ' ' + self.apellido_mecanico
+    
+class Cliente(models.Model):
+    nombre_cliente = models.CharField(max_length=50)
+    apellido_cliente = models.CharField(max_length=50)
+    correo_cliente = models.CharField(max_length=50)
+    cant_mantenciones_cli = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.nombre_cliente + ' ' + self.apellido_cliente    
 
 class Trabajo(models.Model):
     nombre_trabajo = models.CharField(max_length=50)
@@ -38,6 +47,7 @@ class Trabajo(models.Model):
     }
     estado_publicacion = models.CharField(max_length=1,choices=estado_opciones,default=PENDIENTE)
     comentario_admin = models.CharField(max_length=100, blank=True)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     
     def clean(self):
         super().clean()
@@ -55,14 +65,7 @@ class EstadoTrabajo(models.Model):
     def __str__(self):
         return self.estado
 
-class Cliente(models.Model):
-    nombre_cliente = models.CharField(max_length=50)
-    apellido_cliente = models.CharField(max_length=50)
-    correo_cliente = models.CharField(max_length=50)
-    cant_mantenciones_cli = models.IntegerField(default=0)
 
-    def __str__(self):
-        return self.nombre_cliente + ' ' + self.apellido_cliente
 
 class TipoConsulta(models.Model):
     descripcion = models.CharField(max_length=40)

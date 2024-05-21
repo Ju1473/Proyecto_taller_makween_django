@@ -28,11 +28,11 @@ class TrabajoForm(ModelForm):
             'servicio': 'Tipo de Servicio',
         }
 
-class ClienteForm(ModelForm):
+# class ClienteForm(ModelForm):
     
-    class Meta:
-        model = Cliente
-        fields = ['nombre_cliente', 'apellido_cliente', 'correo_cliente']
+#     class Meta:
+#         model = Cliente
+#         fields = ['nombre_cliente', 'apellido_cliente', 'correo_cliente']
 
 class CustomUserCreationForm(UserCreationForm):
 
