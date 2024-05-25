@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from core import funciones
+from core.funciones import upload_to_mecanicos, upload_to_trabajos
 # Create your models here.
 
 class TipoServicio(models.Model):
@@ -15,7 +15,7 @@ class Mecanico(models.Model):
     apellido_mecanico = models.CharField(max_length=50)
     correo_mecanico = models.CharField(max_length=50)
     password_mecanico = models.CharField(max_length=50)
-    foto_mecanico = models.ImageField(upload_to=funciones.custom_upload_to('MECANICOS'), null=True, blank=True)
+    foto_mecanico = models.ImageField(upload_to=upload_to_mecanicos)
     cant_mantenciones_mec = models.IntegerField(default=0)
 
     def __str__(self):
@@ -42,7 +42,7 @@ class Trabajo(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     mecanico = models.ForeignKey(Mecanico, on_delete=models.CASCADE)
     materiales = models.CharField(max_length=50)
-    foto = models.ImageField(upload_to=funciones.custom_upload_to('TRABAJOS'))
+    foto = models.ImageField(upload_to=upload_to_trabajos)
     servicio = models.ForeignKey(TipoServicio, on_delete=models.CASCADE)
     PENDIENTE= "P"
     RECHAZADO= "R"

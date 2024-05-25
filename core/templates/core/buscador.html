@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+
+<div class="container-fluid">
+    <h1>Buscar Trabajos</h1>
+    <form method="get" action="{% url 'buscador' %}">
+        {{ form.as_p }}
+        <button type="submit">Buscar</button>
+    </form>
+
+    <h2>Resultados</h2>
+    <ul>
+        {% for trabajo in trabajos %}
+        <li>{{ trabajo.nombre_trabajo }} - {{ trabajo.diagnostico }} - {{ trabajo.mecanico.nombre_mecanico }} - {{ trabajo.fecha }} -
+            {{ trabajo.materiales }} - {{ trabajo.servicio.descripcion }}</li>
+        {% empty %}
+        <li>No se encontraron trabajos.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

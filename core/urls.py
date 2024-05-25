@@ -1,4 +1,5 @@
 from django.urls import path
+from django.conf.urls import handler404
 from .views import *
 
 urlpatterns = [
@@ -11,7 +12,7 @@ urlpatterns = [
     path('logout/', logout_view, name="logout"),
     path('galeria/', galeria, name="galeria"),
     path('servicios/', servicios, name="servicios"),
-    path('404/', not_found, name="404"),
+    path('404/', pagina_404, name="404"),
     path('mecanicos/mecanicoadd/', mecanicoadd, name="mecanicoadd"),
     path('mecanicos/mecanicolistar/', mecanicos, name="mecanicolistar"),
     path('mecanicos/mecanicoupdate/<id>/', mecanicoupdate, name="mecanicoupdate"),
@@ -26,4 +27,8 @@ urlpatterns = [
     path('reserva/', reserva, name="reserva"),
     path('categoria_trabajo/<int:id>/', categoria_trabajo, name="categoria_trabajo"),
     path('mecanico_trabajo/<id>/', mecanico_trabajo, name="mecanico_trabajo"),
+    path('buscar/', buscador, name='buscador'),
+    path('clientes/', clientes, name='clientes'),
 ]
+
+handler404 = pagina_404

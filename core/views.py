@@ -5,10 +5,36 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
+from django.db.models import Q
 # Create your views here.
 
 def index(request):
-    return render(request, 'core/index.html')
+    trabajos = Trabajo.objects.filter(estado_publicacion="A").order_by('-id')[:3]
+    user = request.user
+    if user.is_authenticated:
+        if user.groups.filter(name='Mecánico').exists():  # Verifica si el usuario es un mecánico
+            try:
+                mecanico = Mecanico.objects.get(correo_mecanico=user.email)
+            except Mecanico.DoesNotExist:
+                mecanico = None
+            aux = {
+                'lista' : trabajos,
+                'mecanico' : mecanico
+            }
+        elif user.groups.filter(name='Cliente').exists():  # Verifica si el usuario es un cliente
+            try:
+                cliente = Cliente.objects.get(correo_cliente=user.email)
+            except Cliente.DoesNotExist:
+                cliente = None
+            aux = {
+                'lista' : trabajos,
+                'cliente' : cliente
+            }
+    else:
+        aux = {
+            'lista' : trabajos
+        }
+    return render(request, 'core/index.html', aux)
 
 def nosotros(request):
     mecanicos = Mecanico.objects.all()
@@ -120,7 +146,6 @@ def mecanicoadd(request):
         else:
             aux['form'] = formulario
             messages.error(request, "No se pudo almacenar el mecánico!")
-
 
     return render(request, 'core/mecanicos/crud_mecanico/add.html', aux)
 
@@ -275,3 +300,37 @@ def mecanico_trabajo(request, id):
     }
 
     return render(request, 'core/mec_trabajo.html', context)
+
+
+def buscador(request):
+    form = TrabajoSearchForm()
+    trabajos = []
+
+    if 'query' in request.GET:
+        form = TrabajoSearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            trabajos = Trabajo.objects.filter(
+                Q(nombre_trabajo__icontains=query) |
+                Q(diagnostico__icontains=query) |
+                Q(mecanico__nombre_mecanico__icontains=query) |
+                Q(fecha__icontains=query) |
+                Q(materiales__icontains=query) |
+                Q(servicio__descripcion__icontains=query)
+            )
+
+    return render(request, 'core/buscador.html', {'form': form, 'trabajos': trabajos})
+
+def pagina_404(request, exception=None):
+    return render(request, 'core/404.html', status=404)
+
+
+def clientes(request):
+    clientes = Cliente.objects.all()
+    for cli in clientes:
+        cli.cant_mantenciones_cli = cli.calcular_cantidad_trabajos()
+        cli.save()
+    aux = {
+        'lista' : clientes
+    }
+    return render(request, 'core/mecanicos/crud_clientes/listar.html', aux)

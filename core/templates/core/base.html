@@ -47,22 +47,36 @@
 
     <!-- Topbar Start -->
     {% if user.is_authenticated %}
-        <div class="container-fluid bg-light p-0">
-            <div class="row gx-0 d-none d-lg-flex">
-                <div class="col-lg-7 px-5 text-start">
-                    <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                        {% if user.is_staff %}
-                            <small class="bi bi-person-fill-gear me-2"></small>
-                            <small class="fa fa-user"> Bienvenido/a Administrador: {{ user.username }}</small>
-                        {% else %}
-                            <small class="bi bi-person-fill me-2"></small>
-                            <small>Bienvenido/a: {{ user.first_name }} {{ user.last_name }}</small>
+    <div class="container-fluid bg-light p-0">
+        <div class="row gx-0 d-none d-lg-flex">
+            <div class="col-lg-7 px-5 text-start">
+                <div class="h-100 d-inline-flex align-items-center py-3 me-4">
+                    {% if user.is_staff %}
+                    <small class="bi bi-person-fill-gear me-2"></small>
+                    <small class="fa fa-user"> Bienvenido/a Administrador: {{ user.username }}</small>
+                    {% else %}
+                    <div class="container-fluid">
+                        <small class="bi bi-person-fill me-2"></small>
+                        <small>Bienvenido/a: {{ user.first_name }} {{ user.last_name }}</small>
+                        {% for group in user.groups.all %}
+                        {% if group.name == 'Mecánico' %}
+                        <div class="container-fluid">
+                            <small class="bi bi-wrench me-2"></small>
+                            <small>Mantenciones Realizadas: {{ mecanico.cant_mantenciones_mec }}</small>
+                        </div>
+                        {% elif group.name == 'Cliente' %}
+                        <div class="container-fluid">
+                            <small class="bi bi-wrench me-2"></small>
+                            <small>Mantenciones Realizadas: {{ cliente.cant_mantenciones_cli }}</small>
+                        </div>
                         {% endif %}
-                        
+                        {% endfor %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
+    </div>
     {% endif %}
     <!-- Topbar End -->
 
@@ -90,23 +104,23 @@
                 </div>
                 <a href="{% url 'contacto' %}" class="nav-item nav-link">Contacto</a>
                 {% if user.is_authenticated %}
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Portal usuario</a>
-                        <div class="dropdown-menu fade-up m-0">
-                            {% if user.is_staff %}
-                                <a href="{% url 'mecanicos' %}" class="dropdown-item">Portal Mecánicos</a>
-                            {% endif %}
-                            {% for group in user.groups.all %}
-                                {% if group.name == 'Mecánico' %}
-                                    <a href="{% url 'mecanicos' %}" class="dropdown-item">Portal Mecánicos</a>
-                                {% endif %}
-                            {% endfor %}
-                            <form action="{% url 'logout' %}" method="post">
-                                {% csrf_token %}
-                                <input type="submit" value="Cerrar sesión" class="dropdown-item">
-                            </form>
-                        </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Portal usuario</a>
+                    <div class="dropdown-menu fade-up m-0">
+                        {% if user.is_staff %}
+                        <a href="{% url 'mecanicos' %}" class="dropdown-item">Portal Mecánicos</a>
+                        {% endif %}
+                        {% for group in user.groups.all %}
+                        {% if group.name == 'Mecánico' %}
+                        <a href="{% url 'mecanicos' %}" class="dropdown-item">Portal Mecánicos</a>
+                        {% endif %}
+                        {% endfor %}
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Cerrar sesión" class="dropdown-item">
+                        </form>
                     </div>
+                </div>
                 {% else %}
                 <a href="{% url 'login' %}" class="nav-item nav-link">Iniciar Sesión<i
                         class="fa fa-arrow-right ms-3"></i></a>

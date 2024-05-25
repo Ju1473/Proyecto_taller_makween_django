@@ -6,4 +6,4 @@ crispy-bootstrap4
 psycopg2
 djangorestframework
 
-#pip install -r requirements.py
+#pip install -r requirements.txt

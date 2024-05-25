@@ -100,6 +100,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+# 	'default': {
+#         'ENGINE' : 'django.db.backends.postgresql_psycopg2',
+#         'HOST' : 'aws-0-sa-east-1.pooler.supabase.com',
+#         'NAME' : 'postgres',
+#         'USER' : 'postgres.yzfmhvawgcsetsotiuid',
+#         'PASSWORD' : 'Juan1473!"#$%&/()',
+#         'PORT' : '5432'
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

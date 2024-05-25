@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from .models import *
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django import forms
 
 class MecanicoForm(ModelForm):
 
@@ -95,3 +96,6 @@ class ReservaAdminForm(ModelForm):
             'estado_reserva' : 'Petición',
             'mecanico' : 'Mecánico responsable'
         }
+
+class TrabajoSearchForm(forms.Form):
+    query = forms.CharField(label='Buscar', max_length=100)
