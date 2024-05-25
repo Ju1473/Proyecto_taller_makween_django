@@ -9,32 +9,7 @@ from django.db.models import Q
 # Create your views here.
 
 def index(request):
-    trabajos = Trabajo.objects.filter(estado_publicacion="A").order_by('-id')[:3]
-    user = request.user
-    if user.is_authenticated:
-        if user.groups.filter(name='Mecánico').exists():  # Verifica si el usuario es un mecánico
-            try:
-                mecanico = Mecanico.objects.get(correo_mecanico=user.email)
-            except Mecanico.DoesNotExist:
-                mecanico = None
-            aux = {
-                'lista' : trabajos,
-                'mecanico' : mecanico
-            }
-        elif user.groups.filter(name='Cliente').exists():  # Verifica si el usuario es un cliente
-            try:
-                cliente = Cliente.objects.get(correo_cliente=user.email)
-            except Cliente.DoesNotExist:
-                cliente = None
-            aux = {
-                'lista' : trabajos,
-                'cliente' : cliente
-            }
-    else:
-        aux = {
-            'lista' : trabajos
-        }
-    return render(request, 'core/index.html', aux)
+    return render(request, 'core/index.html')
 
 def nosotros(request):
     mecanicos = Mecanico.objects.all()
