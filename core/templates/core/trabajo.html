@@ -7,9 +7,11 @@
 </div>
 <h1 class="preview-subject text-center mb-2 my-2">{{ lista.nombre_trabajo }}</h1>
 <p class="text-center mb-0">Fecha de publicación: {{ lista.fecha|date:"SHORT_DATE_FORMAT" }}</p>
-<p class="text-muted mb-0">Mecánico responsable: {{ lista.mecanico }}</p>
-<p class="text-muted mb-0">Diagnostico: {{ lista.diagnostico }}</p>
-<p class="text-muted mb-0">Fecha: {{ lista.fecha|date:"SHORT_DATE_FORMAT" }}</p>
-<p class="text-muted mb-0">Servicio: {{ lista.servicio }}</p>
-<p class="text-muted mb-0">Materiales: {{ lista.materiales }}</p>
+<p class="text-muted mb-0 mx-3">{{ lista.diagnostico }}</p>
+<br>
+<p class="text-muted mb-0 mx-3">Mecánico responsable: {{ lista.mecanico }}</p>
+<br>
+<p class="text-muted mb-0 mx-3">Servicio: {{ lista.servicio }}</p>
+<br>
+<p class="text-muted mb-0 mx-3">Materiales usados: {{ lista.materiales }}</p>
 {% endblock %}

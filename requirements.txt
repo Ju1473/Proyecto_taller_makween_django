@@ -3,3 +3,7 @@ django-admin-interface
 Pillow
 django-crispy-forms
 crispy-bootstrap4
+psycopg2
+djangorestframework
+
+#pip install -r requirements.py

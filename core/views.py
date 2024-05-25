@@ -1,20 +1,30 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
-#from django.contrib import messages
+from django.contrib import messages
 # Create your views here.
 
 def index(request):
     return render(request, 'core/index.html')
 
 def nosotros(request):
-    return render(request, 'core/nosotros.html')
+    mecanicos = Mecanico.objects.all()
+    aux = {
+        'lista' : mecanicos
+    }
+
+    return render(request, 'core/nosotros.html', aux)
 
 def servicios(request):
-    return render(request, 'core/servicios.html')
+    tiposervicios = TipoServicio.objects.all()
+    aux = {
+        'lista' : tiposervicios
+    }
+
+    return render(request, 'core/servicios.html', aux)
 
 def contacto(request):
     aux = {
@@ -40,9 +50,11 @@ def login(request):
     if request.method == 'POST':
         formulario = CustomAuthentication(request.POST)
         if formulario.is_valid():
+            messages.success(request, "Bienvenido")
             return redirect(to="index")
         else:
             aux['form'] = formulario
+            messages.error(request, "No se pudo iniciar sesión")
     
     return render(request, 'registration/login.html', aux)
 
@@ -65,11 +77,11 @@ def register(request):
             cliente.apellido_cliente = user.last_name
             cliente.correo_cliente = user.email
             cliente.save()
-            #messages.success(request, 'Usuario creado correctamente!')
+            messages.success(request, 'Usuario creado correctamente!')
             return redirect(to="index")
         else:
             aux['form'] = formulario
-            #messages.error(request, 'No se pudo almacenar')
+            messages.error(request, 'No se pudo registrar')
 
     return render(request, 'registration/register.html', aux)
 
@@ -78,6 +90,7 @@ def mecanicos(request):
     mecanicos = Mecanico.objects.all()
     for mec in mecanicos:
         mec.cant_mantenciones_mec = mec.calcular_cantidad_trabajos()
+        mec.save()
     aux = {
         'lista' : mecanicos
     }
@@ -100,13 +113,13 @@ def mecanicoadd(request):
     }
 
     if request.method == 'POST':
-        formulario = MecanicoForm(request.POST)
+        formulario = MecanicoForm(request.POST, files=request.FILES)
         if formulario.is_valid():
             formulario.save()
-            aux['msj'] = 'Mecánico almacenado correctamente!'
+            messages.success(request, "Mecánico almacenado correctamente!")
         else:
             aux['form'] = formulario
-            aux['msj'] = 'No se pudo almacenar el mecánico!'
+            messages.error(request, "No se pudo almacenar el mecánico!")
 
 
     return render(request, 'core/mecanicos/crud_mecanico/add.html', aux)
@@ -123,10 +136,10 @@ def mecanicoupdate(request, id):
         if formulario.is_valid():
             formulario.save()
             aux['form'] = formulario
-            aux['msj'] = 'Mecánico modificado correctamente!'
+            messages.success(request, "Mecánico modificado correctamente!")
         else:
             aux['form'] = formulario
-            aux['msj'] = 'No se pudo modificar el mecánico!'
+            messages.error(request, "No se pudo modificar el mecánico!")
 
     return render(request, 'core/mecanicos/crud_mecanico/update.html', aux)
 
@@ -147,16 +160,16 @@ def trabajoadd(request):
         formulario = TrabajoForm(request.POST, files=request.FILES)
         if formulario.is_valid():
             formulario.save()
-            aux['msj'] = 'Proyecto almacenado correctamente!'
+            messages.success(request, "Proyecto almacenado correctamente!")
         else:
             aux['form'] = formulario
-            aux['msj'] = 'No se pudo almacenar el proyecto!'
+            messages.error(request, "No se pudo almacenar el proyecto!")
 
     return render(request, 'core/mecanicos/crud_proyecto/add.html', aux)
 
 @permission_required('core.view_trabajo')
 def trabajos(request):
-    trabajos = Trabajo.objects.all()
+    trabajos = Trabajo.objects.all().order_by('-id')
     aux = {
         'lista' : trabajos
     }
@@ -175,10 +188,10 @@ def trabajoupdate(request, id):
         if formulario.is_valid():
             formulario.save()
             aux['form'] = formulario
-            aux['msj'] = 'Trabajo aplicado correctamente!'
+            messages.success(request, "Trabajo aplicado correctamente!")
         else:
             aux['form'] = formulario
-            aux['msj'] = 'No se pudo aplicar el estado de trabajo!'
+            messages.error(request, "No se pudo aplicar el estado de trabajo!")
 
     return render(request, 'core/mecanicos/crud_proyecto/update.html', aux)
 
@@ -196,3 +209,69 @@ def listarconsultas(request):
     }
 
     return render(request, 'core/mecanicos/consultas.html', aux)
+
+def listarreservas(request):
+    reservas = Reserva.objects.all().order_by('-id')
+    aux = {
+        'lista' : reservas
+    }
+
+    return render(request, 'core/mecanicos/reservas.html', aux)
+
+@login_required
+def reserva(request):
+    aux = {
+        'form' : ReservaForm
+    }
+
+    if request.method == 'POST':
+        formulario = ReservaForm(request.POST, files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+            aux['msj'] = 'Reservado'
+        else:
+            aux['form'] = formulario
+            
+            aux['msj'] = 'No se pudo reservar'
+
+    return render(request, 'core/reserva.html', aux)
+
+def reservaupdate(request, id):
+    reservas = Reserva.objects.get(id=id)
+    aux = {
+        'form' : ReservaAdminForm(instance=reservas)
+    }
+
+    if request.method == 'POST':
+        formulario = ReservaAdminForm(data=request.POST, instance=reservas)
+        if formulario.is_valid():
+            formulario.save()
+            aux['form'] = formulario
+            messages.success(request, "Reserva aplicado correctamente!")
+        else:
+            aux['form'] = formulario
+            messages.error(request, "No se pudo aplicar la reserva!")
+
+    return render(request, 'core/mecanicos/reservaupdate.html', aux)
+
+def categoria_trabajo(request, id):
+    tipo_servicio = get_object_or_404(TipoServicio, id=id)
+    trabajos = Trabajo.objects.filter(servicio=tipo_servicio, estado_publicacion='A').order_by('-id')
+    
+    context = {
+        'tipo_servicio': tipo_servicio,
+        'trabajos': trabajos
+    }
+    
+    return render(request, 'core/cat_trabajo.html', context)
+
+def mecanico_trabajo(request, id):
+    mecanico = get_object_or_404(Mecanico, id=id)
+    trabajos = Trabajo.objects.filter(mecanico=mecanico, estado_publicacion='A').order_by('-id')
+
+    context = {
+        'mecanico' : mecanico,
+        'trabajos' : trabajos
+    }
+
+    return render(request, 'core/mec_trabajo.html', context)

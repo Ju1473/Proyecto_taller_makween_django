@@ -33,7 +33,9 @@
         <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-                <a href="{% url 'index' %}"><h4 class="m-0 text-primary"><i class="fa fa-car me-3 mx-1"></i>Taller Rayo Makween</h4></a>
+                <a href="{% url 'index' %}">
+                    <h4 class="m-0 text-primary"><i class="fa fa-car me-3 mx-1"></i>Taller Rayo Makween</h4>
+                </a>
             </div>
             <ul class="nav">
                 <li class="nav-item nav-category">
@@ -58,14 +60,17 @@
                     </a>
                     <div class="collapse" id="ui-basic">
                         <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="{% url 'trabajolistar' %}">Listar proyectos</a>
+                            <li class="nav-item"> <a class="nav-link" href="{% url 'trabajolistar' %}">Listar
+                                    proyectos</a>
                             </li>
-                            <li class="nav-item"> <a class="nav-link" href="{% url 'trabajoadd' %}">Agregar proyectos</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="{% url 'trabajoadd' %}">Agregar
+                                    proyectos</a></li>
                         </ul>
                     </div>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" data-toggle="collapse" href="#mecanicos" aria-expanded="false" aria-controls="mecanicos">
+                    <a class="nav-link" data-toggle="collapse" href="#mecanicos" aria-expanded="false"
+                        aria-controls="mecanicos">
                         <span class="menu-icon">
                             <i class="mdi mdi-contacts"></i>
                         </span>
@@ -74,10 +79,12 @@
                     </a>
                     <div class="collapse" id="mecanicos">
                         <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="{% url 'mecanicolistar' %}">Listar mecánicos</a>
+                            <li class="nav-item"> <a class="nav-link" href="{% url 'mecanicolistar' %}">Listar
+                                    mecánicos</a>
                             </li>
                             {% if user.is_staff %}
-                            <li class="nav-item"> <a class="nav-link" href="{% url 'mecanicoadd' %}">Agregar mecánicos</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="{% url 'mecanicoadd' %}">Agregar
+                                    mecánicos</a></li>
                             {% endif %}
                         </ul>
                     </div>
@@ -88,6 +95,14 @@
                             <i class="bi bi-file-text"></i>
                         </span>
                         <span class="menu-title">Consultas</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="{% url 'listarreservas' %}">
+                        <span class="menu-icon">
+                            <i class="bi bi-file-text"></i>
+                        </span>
+                        <span class="menu-title">Reservas</span>
                     </a>
                 </li>
             </ul>
@@ -116,6 +131,17 @@
                                 aria-labelledby="profileDropdown">
                                 <h6 class="p-3 mb-0">Perfil</h6>
                                 <div class="dropdown-divider"></div>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-dark rounded-circle">
+                                            <i class="mdi mdi-arrow-left text-success"></i>
+                                        </div>
+                                    </div>
+                                    <form action="{% url 'index' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="submit" value="Volver Inicio" class="dropdown-item">
+                                    </form>
+                                </a>
                                 <a class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-dark rounded-circle">
@@ -157,7 +183,7 @@
                 <!-- partial:partials/_footer.html -->
                 <footer class="footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <a ></a>
+                        <a></a>
                         <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright ©
                             Desarrollado por Estudiantes de Ingeniería en Informática Duoc UC - 2024</span>
                     </div>
@@ -192,8 +218,29 @@
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="{% static 'core/mecanicos/js/dashboard.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- End custom js for this page -->
-
+    {% if messages %}
+    {% for aux in messages %}
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "{{ aux.tags }}",
+            title: "{{ aux }}"
+        });
+    </script>
+    {% endfor %}
+    {% endif %}
 </body>
 
 </html>

@@ -4,13 +4,13 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Inicio - Taller Rayo Makween</title>
+    <title>Taller Rayo Makween</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="{% static 'core/img/logo.png' %}" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,7 +53,7 @@
                     <div class="h-100 d-inline-flex align-items-center py-3 me-4">
                         {% if user.is_staff %}
                             <small class="bi bi-person-fill-gear me-2"></small>
-                            <small>Bienvenido/a Administrador: {{ user.username }}</small>
+                            <small class="fa fa-user"> Bienvenido/a Administrador: {{ user.username }}</small>
                         {% else %}
                             <small class="bi bi-person-fill me-2"></small>
                             <small>Bienvenido/a: {{ user.first_name }} {{ user.last_name }}</small>
@@ -84,9 +84,7 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Páginas</a>
                     <div class="dropdown-menu fade-up m-0">
                         <a href="{% url 'galeria' %}" class="dropdown-item">Galeria</a>
-                        <a href="booking.html" class="dropdown-item">Reserva</a>
-                        <a href="team.html" class="dropdown-item">Técnicos</a>
-                        <a href="testimonial.html" class="dropdown-item">Comentarios</a>
+                        <a href="{% url 'reserva' %}" class="dropdown-item">Reserva</a>
                         <a href="{% url '404' %}" class="dropdown-item">Página 404</a>
                     </div>
                 </div>
@@ -144,25 +142,15 @@
                     <h4 class="text-light mb-4">Horario de apertura</h4>
                     <h6 class="text-light">Lunes - Viernes:</h6>
                     <p class="mb-4">09.00 AM - 09.00 PM</p>
-                    <h6 class="text-light">Sabádos - Domingos:</h6>
+                    <h6 class="text-light">Sábados - Domingos:</h6>
                     <p class="mb-0">09.00 AM - 12.00 PM</p>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Servicios</h4>
-                    <a class="btn btn-link" href="">Prueba de diagnóstico</a>
-                    <a class="btn btn-link" href="">Servicio de motor</a>
-                    <a class="btn btn-link" href="">Cambios de neumáticos</a>
-                    <a class="btn btn-link" href="">Cambio de aceite</a>
-                    <a class="btn btn-link" href="">Limpieza de aspiración</a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Boletín informativo</h4>
-                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-                    <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Tú email">
-                        <button type="button"
-                            class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Inscribirse</button>
-                    </div>
+                    <a class="btn btn-link" href="{% url 'categoria_trabajo' 1 %}">Pruebas de diagnóstico</a>
+                    <a class="btn btn-link" href="{% url 'categoria_trabajo' 2 %}">Mantención de motores</a>
+                    <a class="btn btn-link" href="{% url 'categoria_trabajo' 3 %}">Reemplazo de neumáticos</a>
+                    <a class="btn btn-link" href="{% url 'categoria_trabajo' 4 %}">Cambio de aceite</a>
                 </div>
             </div>
         </div>

@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block contenido %}
+<h1 class="text-center my-4">Trabajos por el mecánico: {{ mecanico.nombre_mecanico }} {{ mecanico.apellido_mecanico }}</h1>
+<br>
+{% for trabajo in trabajos %}
+<div class="container mt-3 my-3">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card mx-auto" style="max-width: 2000px;">
+                <div class="card-body">
+                    <h6 class="preview-subject">{{ trabajo.nombre_trabajo }}</h6>
+                    <p class="text-muted mb-0 my-3">Mecánico responsable: {{ trabajo.mecanico }}</p>
+                    <a href="{% url 'trabajo' trabajo.id %}" class="btn btn-primary my-3">Ver trabajo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
