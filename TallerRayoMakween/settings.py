@@ -28,6 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#Para probar la pagina 404
+# DEBUG = False
+
+# ALLOWED_HOSTS = ['*']
+
 
 # Application definition
 

@@ -98,4 +98,8 @@ class ReservaAdminForm(ModelForm):
         }
 
 class TrabajoSearchForm(forms.Form):
-    query = forms.CharField(label='Buscar', max_length=100)
+    query = forms.CharField(label='Buscar', max_length=100,
+            widget=forms.TextInput(attrs={
+                'class': 'search-input',
+                'placeholder': 'Buscar...',
+            }))

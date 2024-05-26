@@ -1,30 +1,48 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block extra_styles %}
+<style>
+    .full-image {
+        max-height: 700px;
+        width: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .carousel-item img {
+        max-height: 700px;
+        width: 100%;
+        object-fit: contain;  /* Ajusta la imagen para que se contenga dentro del contenedor sin recortarse */
+        object-position: center;  /* Centra la imagen dentro del contenedor */
+    }
+</style>
+{% endblock %}
+
 {% block contenido %}
 <!-- Carousel Start -->
 <div class="container-fluid p-0 mb-5">
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             {% for aux in lista %}
-            {% if aux.estado_publicacion == "A" %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <img class="mx-auto d-block" src="../../../media/{{ aux.foto }}" alt="" height="600">
-                <div class="carousel-caption d-flex align-items-center">
-                    <div class="container">
-                        <div class="row align-items-center justify-content-center justify-content-lg-start">
-                            <div class="col-10 col-lg-7 text-center text-lg-start">
-                                <h6 class="text-white text-uppercase mb-3 animated slideInDown">// {{ aux.servicio }} //
-                                </h6>
-                                <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">{{ aux.nombre_trabajo }}</h1>
-                                <a href="{% url 'trabajo' aux.id %}" class="btn btn-primary py-3 px-5 animated slideInDown">Revisar Trabajo<i
-                                        class="fa fa-arrow-right ms-3"></i></a>
-                            </div>
+                {% if aux.estado_publicacion == 'A' %}
+                    <div class="carousel-item {% if forloop.first %} active {% endif %}">
+                        <img class="full-image" src="../../../media/{{ aux.foto }}" alt="">
+                        <div class="carousel-caption d-flex align-items-center">
+                            <div class="container">
+                                <div class="row align-items-center justify-content-center justify-content-lg-start">
+                                    <div class="col-10 col-lg-7 text-center text-lg-start">
+                                        <h6 class="text-white text-uppercase mb-3 animated slideInDown">// {{ aux.servicio }} //
+                                        </h6>
+                                        <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">{{ aux.nombre_trabajo }}</h1>
+                                        <a href="{% url 'trabajo' aux.id %}" class="btn btn-primary py-3 px-5 animated slideInDown">Revisar Trabajo<i
+                                                class="fa fa-arrow-right ms-3"></i></a>
+                                    </div>
+                                </div>
+                            </div> 
                         </div>
-                    </div> 
-                </div>
-            </div>
-            {% endif %}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
@@ -41,12 +59,6 @@
 <!-- Carousel End -->
 
 <!-- About Start -->
-<div class="container text-center">
-    <h1>Buscar Trabajos</h1>
-    <form method="get" action="{% url 'buscador' %}">
-        <button type="submit">Buscar</button>
-    </form>
-</div>
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5">
@@ -110,29 +122,10 @@
 
 <!-- Fact Start -->
 <div class="container-fluid fact bg-dark my-5 py-5">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.1s">
-                <i class="fa fa-check fa-2x text-white mb-3"></i>
-                <h2 class="text-white mb-2" data-toggle="counter-up">1234</h2>
-                <p class="text-white mb-0">Años de Experiencia</p>
-            </div>
-            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.3s">
-                <i class="fa fa-users-cog fa-2x text-white mb-3"></i>
-                <h2 class="text-white mb-2" data-toggle="counter-up">1234</h2>
-                <p class="text-white mb-0">Técnicos Expertos</p>
-            </div>
-            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.5s">
-                <i class="fa fa-users fa-2x text-white mb-3"></i>
-                <h2 class="text-white mb-2" data-toggle="counter-up">1234</h2>
-                <p class="text-white mb-0">Clientes Satisfechos</p>
-            </div>
-            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.7s">
-                <i class="fa fa-car fa-2x text-white mb-3"></i>
-                <h2 class="text-white mb-2" data-toggle="counter-up">1234</h2>
-                <p class="text-white mb-0">Proyectos Completos</p>
-            </div>
-        </div>
+    <div class="container text-center">
+        <h1 class="text-light">Buscar a otros Trabajos y/o Mecánicos</h1>
+        <br>
+        <a href="{% url 'buscador' %}" class="btn btn-primary">Empieza a buscar</a>
     </div>
 </div>
 <!-- Fact End -->
@@ -190,7 +183,7 @@
                                     automóvil. Confíe en nosotros para mantener su vehículo en óptimas condiciones.</p>
                                 <p><i class="fa fa-check text-success me-3"></i>Servicio de calidad</p>
                                 <p><i class="fa fa-check text-success me-3"></i>Mecánicos Expertos</p>
-                                <a href="{% url 'categoria_trabajo' 1 %}" class="btn btn-primary py-3 px-5 mt-3">Ver
+                                <a href="{% url 'categoria_trabajo' 4 %}" class="btn btn-primary py-3 px-5 mt-3">Ver
                                     trabajos<i class="fa fa-arrow-right ms-3"></i></a>
                                 <a href="{% url 'reserva' %}" class="btn btn-primary py-3 px-5 mt-3">Reserva tu
                                     mantención<i class="fa fa-arrow-right ms-3"></i></a>
@@ -218,7 +211,7 @@
                                     suave y eficiente en cada viaje.</p>
                                 <p><i class="fa fa-check text-success me-3"></i>Herramientas avanzadas</p>
                                 <p><i class="fa fa-check text-success me-3"></i>Prevención de fallas</p>
-                                <a href="{% url 'categoria_trabajo' 2 %}" class="btn btn-primary py-3 px-5 mt-3">Ver
+                                <a href="{% url 'categoria_trabajo' 3 %}" class="btn btn-primary py-3 px-5 mt-3">Ver
                                     trabajos<i class="fa fa-arrow-right ms-3"></i></a>
                                 <a href="{% url 'reserva' %}" class="btn btn-primary py-3 px-5 mt-3">Reserva tu
                                     mantención<i class="fa fa-arrow-right ms-3"></i></a>
@@ -247,7 +240,7 @@
                                     óptimo y una conducción suave.</p>
                                 <p><i class="fa fa-check text-success me-3"></i>Técnicas avanzadas</p>
                                 <p><i class="fa fa-check text-success me-3"></i>Neumáticos de repuesto</p>
-                                <a href="{% url 'categoria_trabajo' 3 %}" class="btn btn-primary py-3 px-5 mt-3">Ver
+                                <a href="{% url 'categoria_trabajo' 2 %}" class="btn btn-primary py-3 px-5 mt-3">Ver
                                     trabajos<i class="fa fa-arrow-right ms-3"></i></a>
                                 <a href="{% url 'reserva' %}" class="btn btn-primary py-3 px-5 mt-3">Reserva tu
                                     mantención<i class="fa fa-arrow-right ms-3"></i></a>
@@ -271,7 +264,7 @@
                                     nosotros para mantener tu motor en su mejor estado y disfrutar de una
                                     conducción suave y sin preocupaciones.</p>
                                 <p><i class="fa fa-check text-success me-3"></i>Aceites de calidad</p>
-                                <a href="{% url 'categoria_trabajo' 4 %}" class="btn btn-primary py-3 px-5 mt-3">Ver
+                                <a href="{% url 'categoria_trabajo' 1 %}" class="btn btn-primary py-3 px-5 mt-3">Ver
                                     trabajos<i class="fa fa-arrow-right ms-3"></i></a>
                                 <a href="{% url 'reserva' %}" class="btn btn-primary py-3 px-5 mt-3">Reserva tu
                                     mantención<i class="fa fa-arrow-right ms-3"></i></a>

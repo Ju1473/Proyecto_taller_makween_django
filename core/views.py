@@ -9,7 +9,12 @@ from django.db.models import Q
 # Create your views here.
 
 def index(request):
-    return render(request, 'core/index.html')
+    trabajos = Trabajo.objects.all().order_by('-id')
+    aux = {
+        'lista' : trabajos
+    }
+
+    return render(request, 'core/index.html', aux)
 
 def nosotros(request):
     mecanicos = Mecanico.objects.all()
@@ -79,7 +84,7 @@ def register(request):
             cliente.correo_cliente = user.email
             cliente.save()
             messages.success(request, 'Usuario creado correctamente!')
-            return redirect(to="index")
+            return redirect(to="login")
         else:
             aux['form'] = formulario
             messages.error(request, 'No se pudo registrar')
@@ -137,6 +142,7 @@ def mecanicoupdate(request, id):
             formulario.save()
             aux['form'] = formulario
             messages.success(request, "Mecánico modificado correctamente!")
+            return redirect(to="mecanicolistar")
         else:
             aux['form'] = formulario
             messages.error(request, "No se pudo modificar el mecánico!")
@@ -189,6 +195,7 @@ def trabajoupdate(request, id):
             formulario.save()
             aux['form'] = formulario
             messages.success(request, "Trabajo aplicado correctamente!")
+            return redirect(to="trabajolistar")
         else:
             aux['form'] = formulario
             messages.error(request, "No se pudo aplicar el estado de trabajo!")
@@ -228,11 +235,10 @@ def reserva(request):
         formulario = ReservaForm(request.POST, files=request.FILES)
         if formulario.is_valid():
             formulario.save()
-            aux['msj'] = 'Reservado'
+            messages.success(request, "Reservado")
         else:
             aux['form'] = formulario
-            
-            aux['msj'] = 'No se pudo reservar'
+            messages.error(request, "No se pudo reservar")
 
     return render(request, 'core/reserva.html', aux)
 
@@ -291,14 +297,13 @@ def buscador(request):
                 Q(mecanico__nombre_mecanico__icontains=query) |
                 Q(fecha__icontains=query) |
                 Q(materiales__icontains=query) |
-                Q(servicio__descripcion__icontains=query)
+                Q(servicio__descripcion__icontains=query), estado_publicacion='A'
             )
 
     return render(request, 'core/buscador.html', {'form': form, 'trabajos': trabajos})
 
 def pagina_404(request, exception=None):
     return render(request, 'core/404.html', status=404)
-
 
 def clientes(request):
     clientes = Cliente.objects.all()

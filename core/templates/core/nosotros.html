@@ -9,8 +9,7 @@
         <div class="container text-center">
             <h1 class="display-3 text-white mb-3 animated slideInDown">Nosotros</h1>
                 <ol class="breadcrumb justify-content-center text-uppercase">
-                    <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-                    <li class="breadcrumb-item"><a href="#">Páginas</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
                     <li class="breadcrumb-item text-white active" aria-current="page">Nosotros</li>
                 </ol>
             </nav>
@@ -73,37 +72,6 @@
 </div>
 <!-- About End -->
 
-
-<!-- Fact Start -->
-<div class="container-fluid fact bg-dark my-5 py-5">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.1s">
-                <i class="fa fa-check fa-2x text-white mb-3"></i>
-                <h2 class="text-white mb-2" data-toggle="counter-up">1234</h2>
-                <p class="text-white mb-0">Años de experiencia</p>
-            </div>
-            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.3s">
-                <i class="fa fa-users-cog fa-2x text-white mb-3"></i>
-                <h2 class="text-white mb-2" data-toggle="counter-up">1234</h2>
-                <p class="text-white mb-0">Técnicos Expertos</p>
-            </div>
-            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.5s">
-                <i class="fa fa-users fa-2x text-white mb-3"></i>
-                <h2 class="text-white mb-2" data-toggle="counter-up">1234</h2>
-                <p class="text-white mb-0">Clientes Satisfechos</p>
-            </div>
-            <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.7s">
-                <i class="fa fa-car fa-2x text-white mb-3"></i>
-                <h2 class="text-white mb-2" data-toggle="counter-up">1234</h2>
-                <p class="text-white mb-0">Proyectos Completos</p>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Fact End -->
-
-
 <!-- Team Start -->
 <div class="container-xxl py-5">
     <div class="container">
@@ -123,9 +91,9 @@
                         <img class="img-fluid" src="{% static 'core/img/Default.png' %}" alt="">
                         {% endif %}
                         <div class="team-overlay position-absolute start-0 top-0 w-100 h-100">
-                            <a class="btn btn-square mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-square mx-1" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-square mx-1" href=""><i class="fab fa-instagram"></i></a>
+                            <a class="btn btn-square mx-1" href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-square mx-1" href="#"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-square mx-1" href="#"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                     <div class="bg-light text-center p-4">

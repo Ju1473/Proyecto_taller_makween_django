@@ -1,5 +1,4 @@
 from django.urls import path
-from django.conf.urls import handler404
 from .views import *
 
 urlpatterns = [
@@ -30,5 +29,3 @@ urlpatterns = [
     path('buscar/', buscador, name='buscador'),
     path('clientes/', clientes, name='clientes'),
 ]
-
-handler404 = pagina_404
