@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -29,9 +30,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 #Para probar la pagina 404
-# DEBUG = False
+#DEBUG = False
 
-# ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +40,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'admin_interface',
     'colorfield',
+    'admin_confirm',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,6 +50,10 @@ INSTALLED_APPS = [
     'core',
     'crispy_forms',
     'crispy_bootstrap4',
+    'rest_framework',
+    'axes',
+    'captcha',
+    'django_recaptcha',
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
@@ -55,6 +61,22 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# RECAPTCHA
+RECAPTCHA_PUBLIC_KEY = '6LekLfcpAAAAAPkRH764CYWWw5od-gMh6CMZhokV'
+RECAPTCHA_PRIVATE_KEY = '6LekLfcpAAAAAIbZewBfjrqKtcAo2iwqD4ENnbD7'
+
+# CONFIG AXES
+
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+AXES_FAILURE_LIMIT = 3 # SON LOS NUMEROS DE INTENTOS FALLIDOS POR EL USUARIO
+AXES_COOLOFF_TIME = timedelta(minutes=1) # CANTIDAD DE TIEMPO QUE TIENE QUE ESPERAR ANTES DE OTRO LOG
+AXES_LOCKOUT_URL = '/account_locked/'
+AXES_RESET_ON_SUCCESS = True # RESETEA EL CONTADOR DE LOS FALLOS CUANDO HAY LOGIN EXITOSO
 
 # CONFIGURACIÓN DEL LOGIN Y LOGOUT
 
@@ -72,6 +94,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # AXES
+    'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'TallerRayoMakween.urls'

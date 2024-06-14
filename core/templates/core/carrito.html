@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block contenido %}
+<!-- Page Header Start -->
+<div class="container-fluid page-header mb-5 p-0" style="background-image: url(../static/core/inicio/img/carousel-bg-2.jpg);">
+    <div class="container-fluid page-header-inner py-5">
+        <div class="container text-center">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Carrito de servicios</h1>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+<br>
+
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+    paypal.Button.render({
+// Configure environment
+env: 'sandbox',
+client: {
+sandbox: 'AVfY2oW0fEDQzZAPC64ioCnuP4yt5_p63qnE87NtYhPCAkD45Vw-I1QXSLr6UyovFi6kI8R8QJcqI4Em',
+production: 'demo_production_client_id'
+},
+// Customize button (optional)
+locale: 'en_US',
+style: {
+size: 'small',
+color: 'gold',
+shape: 'pill',
+},
+
+// Enable Pay Now checkout flow (optional)
+commit: true,
+
+// Set up a payment
+payment: function (data, actions) {
+return actions.payment.create({
+transactions: [{
+amount: {
+total: '10.00',
+currency: 'USD'
+}
+}]
+});
+},
+// Execute the payment
+onAuthorize: function (data, actions) {
+return actions.payment.execute().then(function () {
+// Show a confirmation message to the buyer
+window.alert('Thank you for your purchase!');
+});
+}
+}, '#paypal-button');
+</script>
+{% endblock %}

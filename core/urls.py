@@ -1,5 +1,16 @@
-from django.urls import path
+from django.urls import path, include
 from .views import *
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register('tiposervicio', TipoServicioViewset)
+router.register('mecanico', MecanicoViewset)
+router.register('cliente', ClienteViewset)
+router.register('trabajo', TrabajoViewset)
+router.register('estadotrabajo', EstadoTrabajoViewset)
+router.register('tipoconsultas', TipoConsultasViewset)
+router.register('contacto', ContactoViewset)
+router.register('reserva', ReservaViewset)
 
 urlpatterns = [
     path('', index, name="index"),
@@ -28,4 +39,9 @@ urlpatterns = [
     path('mecanico_trabajo/<id>/', mecanico_trabajo, name="mecanico_trabajo"),
     path('buscar/', buscador, name='buscador'),
     path('clientes/', clientes, name='clientes'),
+    path('account_locked/', account_locked, name='account_locked'),
+    path('res_servicios/', res_servicios, name="res_servicios"),
+    path('carrito/', carrito, name="carrito"),
+    # APIs
+    path('api/', include(router.urls)),
 ]

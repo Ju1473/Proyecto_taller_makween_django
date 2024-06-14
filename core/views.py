@@ -6,8 +6,54 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.db.models import Q
+from rest_framework import viewsets
+from rest_framework.renderers import JSONRenderer
+from .serializers import *
+from django.core.paginator import Paginator
 # Create your views here.
 
+# APIS
+class TipoServicioViewset(viewsets.ModelViewSet):
+	queryset = TipoServicio.objects.all()
+	serializer_class = TipoServicioSerializers
+	renderer_classes = [JSONRenderer]
+
+class MecanicoViewset(viewsets.ModelViewSet):
+	queryset = Mecanico.objects.all()
+	serializer_class = MecanicoSerializers
+	renderer_classes = [JSONRenderer]
+
+class ClienteViewset(viewsets.ModelViewSet):
+	queryset = Cliente.objects.all()
+	serializer_class = ClienteSerializers
+	renderer_classes = [JSONRenderer]
+
+class TrabajoViewset(viewsets.ModelViewSet):
+	queryset = Trabajo.objects.all()
+	serializer_class = TrabajoSerializers
+	renderer_classes = [JSONRenderer]
+
+class EstadoTrabajoViewset(viewsets.ModelViewSet):
+	queryset = EstadoTrabajo.objects.all()
+	serializer_class = EstadoTrabajoSerializers
+	renderer_classes = [JSONRenderer]
+
+class TipoConsultasViewset(viewsets.ModelViewSet):
+	queryset = TipoConsulta.objects.all()
+	serializer_class = TipoConsultaSerializers
+	renderer_classes = [JSONRenderer]
+
+class ContactoViewset(viewsets.ModelViewSet):
+	queryset = Contacto.objects.all()
+	serializer_class = ContactoSerializers
+	renderer_classes = [JSONRenderer]
+
+class ReservaViewset(viewsets.ModelViewSet):
+	queryset = Reserva.objects.all()
+	serializer_class = ReservaSerializers
+	renderer_classes = [JSONRenderer]
+
+# VISTAS
 def index(request):
     trabajos = Trabajo.objects.all().order_by('-id')
     aux = {
@@ -15,6 +61,9 @@ def index(request):
     }
 
     return render(request, 'core/index.html', aux)
+
+def account_locked(request):
+    return render(request, 'core/account_locked.html')
 
 def nosotros(request):
     mecanicos = Mecanico.objects.all()
@@ -97,15 +146,27 @@ def mecanicos(request):
     for mec in mecanicos:
         mec.cant_mantenciones_mec = mec.calcular_cantidad_trabajos()
         mec.save()
+
+    # PAGINATOR
+    paginator = Paginator(mecanicos, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     aux = {
-        'lista' : mecanicos
+        'page_obj' : page_obj
     }
     return render(request, 'core/mecanicos/crud_mecanico/listar.html', aux)
 
 def galeria(request):
     trabajos = Trabajo.objects.all()
+
+    # PAGINATOR
+    paginator = Paginator(trabajos, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     aux = {
-        'lista' : trabajos
+        'page_obj' : page_obj
     }
     return render(request, 'core/galeria.html',aux)
 
@@ -176,8 +237,14 @@ def trabajoadd(request):
 @permission_required('core.view_trabajo')
 def trabajos(request):
     trabajos = Trabajo.objects.all().order_by('-id')
+
+    # PAGINATOR
+    paginator = Paginator(trabajos, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     aux = {
-        'lista' : trabajos
+        'page_obj' : page_obj
     }
 
     return render(request, 'core/mecanicos/crud_proyecto/listar.html', aux)
@@ -211,8 +278,14 @@ def trabajo(request, id):
 
 def listarconsultas(request):
     consultas = Contacto.objects.all()
+
+    # PAGINATOR
+    paginator = Paginator(consultas, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     aux = {
-        'lista' : consultas
+        'page_obj' : page_obj
     }
 
     return render(request, 'core/mecanicos/consultas.html', aux)
@@ -263,10 +336,15 @@ def reservaupdate(request, id):
 def categoria_trabajo(request, id):
     tipo_servicio = get_object_or_404(TipoServicio, id=id)
     trabajos = Trabajo.objects.filter(servicio=tipo_servicio, estado_publicacion='A').order_by('-id')
+
+    # PAGINATOR
+    paginator = Paginator(trabajos, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     
     context = {
         'tipo_servicio': tipo_servicio,
-        'trabajos': trabajos
+        'page_obj': page_obj
     }
     
     return render(request, 'core/cat_trabajo.html', context)
@@ -275,9 +353,14 @@ def mecanico_trabajo(request, id):
     mecanico = get_object_or_404(Mecanico, id=id)
     trabajos = Trabajo.objects.filter(mecanico=mecanico, estado_publicacion='A').order_by('-id')
 
+    # PAGINATOR
+    paginator = Paginator(trabajos, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'mecanico' : mecanico,
-        'trabajos' : trabajos
+        'page_obj' : page_obj
     }
 
     return render(request, 'core/mec_trabajo.html', context)
@@ -314,3 +397,11 @@ def clientes(request):
         'lista' : clientes
     }
     return render(request, 'core/mecanicos/crud_clientes/listar.html', aux)
+
+@login_required
+def res_servicios(request):
+    return render(request, 'core/res_servicios.html')
+
+@login_required
+def carrito(request):
+    return render(request, 'core/carrito.html')

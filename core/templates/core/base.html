@@ -111,7 +111,7 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Páginas</a>
                     <div class="dropdown-menu fade-up m-0">
                         <a href="{% url 'galeria' %}" class="dropdown-item">Galeria</a>
-                        <a href="{% url 'reserva' %}" class="dropdown-item">Reserva</a>
+                        <a href="{% url 'res_servicios' %}" class="dropdown-item">Reservar servicios</a>
                         <a href="{% url 'buscador' %}" class="dropdown-item">Búsqueda</a>
                         <a href="{% url '404' %}" class="dropdown-item">Página 404</a>
                     </div>
@@ -127,6 +127,8 @@
                         {% for group in user.groups.all %}
                         {% if group.name == 'Mecánico' %}
                         <a href="{% url 'mecanicos' %}" class="dropdown-item">Portal Mecánicos</a>
+                        {% elif group.name == 'Cliente' %}
+                        <a href="{% url 'carrito' %}" class="dropdown-item">Ver carrito</a>
                         {% endif %}
                         {% endfor %}
                         <form action="{% url 'logout' %}" method="post">

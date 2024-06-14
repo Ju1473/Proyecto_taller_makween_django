@@ -3,8 +3,12 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
+from captcha.fields import CaptchaField
+from django_recaptcha.fields import ReCaptchaField
 
 class MecanicoForm(ModelForm):
+    #captcha = CaptchaField()
+    captcha = ReCaptchaField()
 
     class Meta:
         model = Mecanico
@@ -18,6 +22,8 @@ class MecanicoForm(ModelForm):
         }
 
 class TrabajoForm(ModelForm):
+    #captcha = CaptchaField()
+    captcha = ReCaptchaField()
 
     class Meta:
         model = Trabajo
