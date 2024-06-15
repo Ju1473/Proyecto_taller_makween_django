@@ -404,4 +404,52 @@ def res_servicios(request):
 
 @login_required
 def carrito(request):
+
+    return render(request, 'core/carrito.html')
+
+def agregar_carrito(request, usuario, servicio):
+    if request.method == "POST":
+        servicio_nombre = f'servicio_{servicio}'
+        
+        carrito_obj, created = Carrito.objects.get_or_create(usuario=usuario)
+        
+        setattr(carrito_obj, servicio_nombre, Carrito.SI)
+        carrito_obj.actualizar_total()
+        carrito_obj.save()
+
+        return render(request, 'core/res_servicios.html', {'carrito': carrito_obj})
+    
+    return render(request, 'core/res_servicios.html')
+
+def eliminar_carrito(request, usuario, servicio):
+    if request.method == "POST":
+        servicio_nombre = f'servicio_{servicio}'
+        
+        carrito_obj, created = Carrito.objects.get_or_create(usuario=usuario)
+        
+        setattr(carrito_obj, servicio_nombre, Carrito.NO)
+        carrito_obj.actualizar_total()
+        carrito_obj.save()
+
+
+        return render(request, 'core/res_servicios.html', {'carrito': carrito_obj})
+
+    return render(request, 'core/res_servicios.html')
+
+def limpiar_carrito(request, usuario):
+    if request.method == "POST":
+        carrito_obj, created = Carrito.objects.get_or_create(usuario=usuario)
+        
+        # Cambiar el estado de todos los servicios a "NO"
+        carrito_obj.servicio_1 = Carrito.NO
+        carrito_obj.servicio_2 = Carrito.NO
+        carrito_obj.servicio_3 = Carrito.NO
+        carrito_obj.servicio_4 = Carrito.NO
+
+        # Actualizar el total del carrito
+        carrito_obj.actualizar_total()
+        carrito_obj.save()
+
+        return render(request, 'core/carrito.html', {'carrito': carrito_obj})
+
     return render(request, 'core/carrito.html')

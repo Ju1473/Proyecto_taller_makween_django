@@ -35,14 +35,17 @@
 
     <style>
         .search-container {
-            max-width: 600px;  /* Ajusta este valor según sea necesario */
+            max-width: 600px;
+            /* Ajusta este valor según sea necesario */
             width: 100%;
         }
 
         .search-input {
             width: 100%;
-            padding: 10px; /* Ajusta el padding según tus necesidades */
-            box-sizing: border-box; /* Asegura que el padding no aumente el tamaño del input */
+            padding: 10px;
+            /* Ajusta el padding según tus necesidades */
+            box-sizing: border-box;
+            /* Asegura que el padding no aumente el tamaño del input */
         }
     </style>
     {% block extra_styles %}{% endblock %}
@@ -62,23 +65,23 @@
     {% if user.is_authenticated %}
     <div class="container-fluid bg-light p-0">
         <div class="row gx-0 d-none d-lg-flex">
-            <div class="col-lg-7 px-5 text-start">
-                <div class="h-100 d-inline-flex align-items-center py-3 me-4">
+            <div class="col-lg-12 px-5 d-flex justify-content-between align-items-center py-3">
+                <div class="d-inline-flex align-items-center">
                     {% if user.is_staff %}
                     <small class="bi bi-person-fill-gear me-2"></small>
                     <small class="fa fa-user"> Bienvenido/a Administrador: {{ user.username }}</small>
                     {% else %}
-                    <div class="container-fluid">
+                    <div>
                         <small class="bi bi-person-fill me-2"></small>
                         <small>Bienvenido/a: {{ user.first_name }} {{ user.last_name }}</small>
                         {% for group in user.groups.all %}
                         {% if group.name == 'Mecánico' %}
-                        <div class="container-fluid">
+                        <div>
                             <small class="bi bi-wrench me-2"></small>
                             <small>Mantenciones Realizadas: {{ mecanico.cant_mantenciones_mec }}</small>
                         </div>
                         {% elif group.name == 'Cliente' %}
-                        <div class="container-fluid">
+                        <div>
                             <small class="bi bi-wrench me-2"></small>
                             <small>Mantenciones Solicitadas: {{ cliente.cant_mantenciones_cli }}</small>
                         </div>
@@ -86,6 +89,41 @@
                         {% endfor %}
                     </div>
                     {% endif %}
+                </div>
+                <div class="ms-auto">
+                    <div class="dropstart position-relative">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-cart2 h2 text-dark"></i>
+                        </a>
+                        <ul class="dropdown-menu" style="z-index: 1050;">
+                            <li>
+                                <h5 class="dropdown-header text-center">Servicios</h5>
+                            </li>
+                            {% if carrito.servicio_1 == 'S' %}
+                            <li><h6 class="text-center">Pruebas de diagnóstico</h6></li>
+                            {% endif %}
+                            {% if carrito.servicio_2 == 'S' %}
+                            <li><h6 class="text-center">Mantención de Motores</h6></li>
+                            {% endif %}
+                            {% if carrito.servicio_3 == 'S' %}
+                            <li><h6 class="text-center">Reemplazo de neumáticos</h6></li>
+                            {% endif %}
+                            {% if carrito.servicio_4 == 'S' %}
+                            <li><h6 class="text-center">Cambio de aceite</h6></li>
+                            {% endif %}
+                            <li>
+                                <hr>
+                                <h5 class="dropdown-header text-center">Total Carrito</h5>
+                            </li>
+                            <li>
+                                {% if carrito %}
+                                <p class="text-center">${{ total_car }} USD</p>
+                                {% else %}
+                                <p>No hay servicios en el carrito.</p>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -202,6 +240,10 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
+
+    {% block js %}
+
+    {% endblock%}
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

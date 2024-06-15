@@ -18,3 +18,20 @@ def user_info(request):
             except Cliente.DoesNotExist:
                 pass
     return user_info
+
+def carrito_de_compras(request):
+    user = request.user
+
+    user_info = {'user': user}
+
+    try:
+        carrito = Carrito.objects.get(usuario=user_info['user'])
+    except Carrito.DoesNotExist:
+        carrito = None
+
+    context = {
+        'carrito': carrito,
+        'total_car': carrito.total_carrito if carrito else 0,
+    }
+
+    return context

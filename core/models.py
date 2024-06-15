@@ -110,3 +110,33 @@ class Reserva(models.Model):
         super().clean()
         if self.estado_reserva == self.ACEPTADO and not self.mecanico:
             raise ValidationError({'mecanico': 'Debe tener un mecánico que hará el trabajo!'})
+        
+class Carrito(models.Model):
+    usuario = models.CharField(max_length=50)
+    NO= "N"
+    SI= "S"
+    estado_opciones = {
+        NO: "No",
+        SI: "Si",
+    }
+    servicio_1 = models.CharField(max_length=1,choices=estado_opciones,default=NO)
+    servicio_2 = models.CharField(max_length=1,choices=estado_opciones,default=NO)
+    servicio_3 = models.CharField(max_length=1,choices=estado_opciones,default=NO)
+    servicio_4 = models.CharField(max_length=1,choices=estado_opciones,default=NO)
+    total_carrito = models.FloatField(default=0)
+
+    def __str__(self):
+        return f"Carrito de {self.usuario}"
+
+    def actualizar_total(self):
+        total = 0
+        if self.servicio_1 == self.SI:
+            total += 2.5
+        if self.servicio_2 == self.SI:
+            total += 10
+        if self.servicio_3 == self.SI:
+            total += 8.5
+        if self.servicio_4 == self.SI:
+            total += 5.5
+        self.total_carrito = total
+        self.save()
