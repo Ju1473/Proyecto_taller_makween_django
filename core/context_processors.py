@@ -29,9 +29,13 @@ def carrito_de_compras(request):
     except Carrito.DoesNotExist:
         carrito = None
 
+    total_car = carrito.total_carrito if carrito else 0
+    formatted_total_car = "{:.2f}".format(total_car)
+
     context = {
         'carrito': carrito,
-        'total_car': carrito.total_carrito if carrito else 0,
+        'total_car': total_car,
+        'format_total_car': formatted_total_car,
     }
 
     return context

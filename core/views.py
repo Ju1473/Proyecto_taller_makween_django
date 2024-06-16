@@ -10,6 +10,9 @@ from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
 from .serializers import *
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 # Create your views here.
 
 # APIS
@@ -407,6 +410,7 @@ def carrito(request):
 
     return render(request, 'core/carrito.html')
 
+@login_required
 def agregar_carrito(request, usuario, servicio):
     if request.method == "POST":
         servicio_nombre = f'servicio_{servicio}'
@@ -421,6 +425,7 @@ def agregar_carrito(request, usuario, servicio):
     
     return render(request, 'core/res_servicios.html')
 
+@login_required
 def eliminar_carrito(request, usuario, servicio):
     if request.method == "POST":
         servicio_nombre = f'servicio_{servicio}'
@@ -436,6 +441,7 @@ def eliminar_carrito(request, usuario, servicio):
 
     return render(request, 'core/res_servicios.html')
 
+@login_required
 def limpiar_carrito(request, usuario):
     if request.method == "POST":
         carrito_obj, created = Carrito.objects.get_or_create(usuario=usuario)
@@ -453,3 +459,22 @@ def limpiar_carrito(request, usuario):
         return render(request, 'core/carrito.html', {'carrito': carrito_obj})
 
     return render(request, 'core/carrito.html')
+
+# @csrf_exempt
+# @login_required
+# def procesar_pago(request):
+#     if request.method == "POST":
+#         data = json.loads(request.body)
+#         payment_id = data.get('paymentID')
+#         payer_id = data.get('payerID')
+#         payment_token = data.get('paymentToken')
+#         return_url = data.get('returnUrl')
+#         payment_details = data.get('paymentDetails')
+
+#         # Aquí puedes procesar y guardar la información del pago en tu base de datos
+#         # Ejemplo:
+#         # Payment.objects.create(user=request.user, payment_id=payment_id, payer_id=payer_id, ...)
+
+#         return JsonResponse({'status': 'success'})
+
+#     return JsonResponse({'status': 'failed'}, status=400)
