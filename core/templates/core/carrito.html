@@ -120,49 +120,68 @@
         },
         // Execute the payment
         onAuthorize: function (data, actions) {
-              return actions.payment.execute().then(function () {
-                  // Payment was successful
-                  Swal.fire({
-                      title: 'Confirmación',
-                      text: 'Pago realizado correctamente!',
-                      icon: 'success',
-                      showCancelButton: false,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Confirmar'
-                  }).then(function() {
-                      // Send request to clean the cart
-                      fetch("{% url 'limpiar_carrito' user.username %}", {
-                          method: "POST",
-                          headers: {
-                              "Content-Type": "application/json",
-                              "X-CSRFToken": "{{ csrf_token }}"
-                          },
-                          body: JSON.stringify({})
-                      }).then(response => {
-                          if (response.ok) {
-                              window.location.reload();
-                          } else {
-                              console.error("No se pudo limpiar el carrito");
-                          }
-                      }).catch(error => {
-                          console.error("Error:", error);
-                      });
-                  });
-              });
-          },
-          onCancel(data) {
-              Swal.fire({
-                      title: 'Cancelado',
-                      text: 'Transacción cancelada!',
-                      icon: 'error',
-                      showCancelButton: false,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Confirmar'
-                  })
-          }
+            return actions.payment.execute().then(function (payment) {
+                // Payment was successful
+                Swal.fire({
+                    title: 'Confirmación',
+                    text: 'Pago realizado correctamente!',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirmar'
+                }).then(function() {
+                    fetch("{% url 'procesar_pago' %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: JSON.stringify({
+                            paymentID: data.paymentID,
+                            payerID: data.payerID,
+                            paymentToken: data.paymentToken,
+                            returnUrl: data.returnUrl,
+                            paymentDetails: payment
+                        })
+                    }).then(response => {
+                        if (response.ok) {
+                            fetch("{% url 'limpiar_carrito' user.username %}", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-CSRFToken": "{{ csrf_token }}"
+                                },
+                                body: JSON.stringify({})
+                            }).then(response => {
+                                if (response.ok) {
+                                    window.location.reload();
+                                } else {
+                                    console.error("No se pudo limpiar el carrito");
+                                }
+                            }).catch(error => {
+                                console.error("Error:", error);
+                            });
+                        } else {
+                            console.error("No se pudo procesar el pago");
+                        }
+                    }).catch(error => {
+                        console.error("Error:", error);
+                    });
+                });
+            });
+        },
+        onCancel: function (data) {
+            Swal.fire({
+                title: 'Cancelado',
+                text: 'Transacción cancelada!',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Confirmar'
+            });
+        }
     }, '#paypal-button');
-
 </script>
 {% endblock%}

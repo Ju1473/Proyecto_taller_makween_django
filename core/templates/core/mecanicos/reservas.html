@@ -12,7 +12,6 @@
     <div class="flex-grow">
       <h3 class="preview-subject">Cliente: {{ aux.nombre_apellido }}</h3>
       <p class="mb-2">Correo: {{ aux.email_reserva }}</p>
-      <p class="mb-3">Teléfono: +56 {{ aux.telefono }}</p>
       {% if aux.estado_reserva == 'A' %}
       <p class="mb-2">Mecánico responsable: {{ aux.mecanico }}</p>
       {% endif %}

@@ -12,6 +12,7 @@ from .serializers import *
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 import json
 # Create your views here.
 
@@ -460,21 +461,59 @@ def limpiar_carrito(request, usuario):
 
     return render(request, 'core/carrito.html')
 
-# @csrf_exempt
-# @login_required
-# def procesar_pago(request):
-#     if request.method == "POST":
-#         data = json.loads(request.body)
-#         payment_id = data.get('paymentID')
-#         payer_id = data.get('payerID')
-#         payment_token = data.get('paymentToken')
-#         return_url = data.get('returnUrl')
-#         payment_details = data.get('paymentDetails')
+@csrf_exempt
+@login_required
+def procesar_pago(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        payment_id = data.get('paymentID')
+        payer_id = data.get('payerID')
+        payment_token = data.get('paymentToken')
+        payment_details = data.get('paymentDetails')
 
-#         # Aquí puedes procesar y guardar la información del pago en tu base de datos
-#         # Ejemplo:
-#         # Payment.objects.create(user=request.user, payment_id=payment_id, payer_id=payer_id, ...)
+        # Guardar los datos del pago en el modelo Pago_reserva
+        Pago_reserva.objects.create(
+            usuario=request.user.username,
+            id_pago=payment_id,
+            id_pagador=payer_id,
+            token_pago=payment_token,
+            detalle_pago=payment_details
+        )
 
-#         return JsonResponse({'status': 'success'})
+        user = request.user
 
-#     return JsonResponse({'status': 'failed'}, status=400)
+        user_info = {'user': user}
+
+        carrito = Carrito.objects.filter(usuario=user_info['user']).first()
+
+        servicios_list = []
+        if carrito:
+            if carrito.servicio_1 == Carrito.SI:
+                servicios_list.append("Pruebas de diagnóstico")
+            if carrito.servicio_2 == Carrito.SI:
+                servicios_list.append("Mantención de Motores")
+            if carrito.servicio_3 == Carrito.SI:
+                servicios_list.append("Reemplazo de neumáticos")
+            if carrito.servicio_4 == Carrito.SI:
+                servicios_list.append("Cambio de aceite")
+
+        servicios = ', '.join(servicios_list)
+        nombre_apellido = f'{user.first_name} {user.last_name}'
+        Reserva.objects.create(
+            nombre_apellido= nombre_apellido,
+            email_reserva=user.email,
+            servicios=servicios,
+        )
+
+        # Limpiar el carrito del usuario
+        if carrito:
+            carrito.servicio_1 = Carrito.NO
+            carrito.servicio_2 = Carrito.NO
+            carrito.servicio_3 = Carrito.NO
+            carrito.servicio_4 = Carrito.NO
+            carrito.total_carrito = 0
+            carrito.save()
+
+        return JsonResponse({'status': 'success'})
+
+    return JsonResponse({'status': 'failed'}, status=400)

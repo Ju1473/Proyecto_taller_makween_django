@@ -85,12 +85,10 @@ class ReservaForm(ModelForm):
 
     class Meta:
         model = Reserva
-        fields = ['nombre_apellido','email_reserva','telefono','tipo_servicio']
+        fields = ['nombre_apellido','email_reserva']
         labels = {
             'nombre_apellido' : 'Nombre y Apellido',
             'email_reserva' : 'Correo electrónico',
-            'telefono' : 'Teléfono',
-            'tipo_servicio' : 'Servicio'
         }
 
 class ReservaAdminForm(ModelForm):

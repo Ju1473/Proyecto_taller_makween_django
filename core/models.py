@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from core.funciones import upload_to_mecanicos, upload_to_trabajos
+
 # Create your models here.
 
 class TipoServicio(models.Model):
@@ -89,11 +90,21 @@ class Contacto(models.Model):
     def __str__(self):
         return self.nombre_apellido
 
+class Pago_reserva(models.Model):
+    usuario = models.CharField(max_length=50)
+    id_pago = models.CharField(max_length=50)
+    id_pagador = models.CharField(max_length=50)
+    token_pago = models.CharField(max_length=50)
+    detalle_pago = models.JSONField()
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Pago {self.id_pago} por {self.usuario}"
+
 class Reserva(models.Model):
     nombre_apellido = models.CharField(max_length=100)
     email_reserva = models.CharField(max_length=50)
-    telefono = models.CharField(max_length=9,validators=[RegexValidator(r'^\d{9}$', 'El número de teléfono debe tener 9 dígitos numéricos.')])
-    tipo_servicio = models.ForeignKey(TipoServicio, on_delete=models.CASCADE)
+    servicios = models.CharField(max_length=255)
     mecanico = models.ForeignKey(Mecanico, on_delete=models.CASCADE, null=True)
     PENDIENTE= "P"
     ACEPTADO= "A"
@@ -140,3 +151,4 @@ class Carrito(models.Model):
             total += 5.5
         self.total_carrito = total
         self.save()
+
