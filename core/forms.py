@@ -7,8 +7,8 @@ from captcha.fields import CaptchaField
 from django_recaptcha.fields import ReCaptchaField
 
 class MecanicoForm(ModelForm):
-    #captcha = CaptchaField()
-    captcha = ReCaptchaField()
+    captcha = CaptchaField()
+    #captcha = ReCaptchaField()
 
     class Meta:
         model = Mecanico
@@ -22,8 +22,8 @@ class MecanicoForm(ModelForm):
         }
 
 class TrabajoForm(ModelForm):
-    #captcha = CaptchaField()
-    captcha = ReCaptchaField()
+    captcha = CaptchaField()
+    #captcha = ReCaptchaField()
 
     class Meta:
         model = Trabajo
@@ -55,7 +55,8 @@ class CustomAuthentication(AuthenticationForm):
         fields = ['username', 'password1']
 
 class ContactoForm(ModelForm):
-    
+    captcha = CaptchaField()
+
     class Meta:
         model = Contacto
         fields = ['nombre_apellido','email_contacto','telefono','consulta','info_adicional']

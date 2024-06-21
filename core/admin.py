@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import *
 from admin_confirm import AdminConfirmMixin
 from django.contrib.admin import ModelAdmin
+from django.contrib.auth.forms import AuthenticationForm
 
 class TipoServicioModelAdmin(AdminConfirmMixin, ModelAdmin):
         confirm_change = True

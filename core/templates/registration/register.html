@@ -36,6 +36,7 @@
                                 {{ form | crispy }}
                                 <input type="submit" value="Registrar" class="btn btn-primary mt-3 float-right">
                                 <p class="sign-up float-left mt-3">¿Tienes una cuenta?<a href="{% url 'login' %}"> Iniciar sesión</a></p>
+                                <p class="sign-up float-left mt-3">¿Olvidaste tu contraseña?<a href="{% url 'password_reset' %}"> Recuperar contraseña</a></p>
                             </form>
                         </div>
                     </div>

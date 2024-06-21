@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 import json
+import requests
 # Create your views here.
 
 # APIS
@@ -56,6 +57,22 @@ class ReservaViewset(viewsets.ModelViewSet):
 	queryset = Reserva.objects.all()
 	serializer_class = ReservaSerializers
 	renderer_classes = [JSONRenderer]
+
+# CONSUMO DE APIS
+def mecanicosapi(request):
+    response = requests.get('http://127.0.0.1:8000/api/mecanico/')
+    mecanicos = response.json()
+    aux = {
+        'lista' : mecanicos
+    }
+
+    return render(request, 'core/mecanicos/crudapi/listar.html', aux)
+
+def mecanicodetalle(request, id):
+    response = requests.get(f'http://127.0.0.1:8000/api/mecanico/{id}/')
+    mecanico = response.json()
+
+    return render(request, 'core/mecanicos/crudapi/detalle.html', {'mecanico' : mecanico})
 
 # VISTAS
 def index(request):
@@ -517,3 +534,14 @@ def procesar_pago(request):
         return JsonResponse({'status': 'success'})
 
     return JsonResponse({'status': 'failed'}, status=400)
+
+@login_required
+def historial_pago(request):
+    user = request.user
+    user_info = {'user': user}
+    pagos = Pago_reserva.objects.filter(usuario=user_info['user'])
+    aux = {
+        'lista' : pagos
+    }
+
+    return render(request, 'core/historial_pago.html', aux)

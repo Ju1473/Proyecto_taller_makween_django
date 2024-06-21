@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from core.funciones import upload_to_mecanicos, upload_to_trabajos
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 
@@ -16,7 +17,7 @@ class Mecanico(models.Model):
     apellido_mecanico = models.CharField(max_length=50)
     correo_mecanico = models.CharField(max_length=50)
     password_mecanico = models.CharField(max_length=50)
-    foto_mecanico = models.ImageField(upload_to=upload_to_mecanicos)
+    foto_mecanico = CloudinaryField('imagen')
     cant_mantenciones_mec = models.IntegerField(default=0)
 
     def __str__(self):
@@ -43,7 +44,7 @@ class Trabajo(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     mecanico = models.ForeignKey(Mecanico, on_delete=models.CASCADE)
     materiales = models.CharField(max_length=50)
-    foto = models.ImageField(upload_to=upload_to_trabajos)
+    foto = CloudinaryField('imagen')
     servicio = models.ForeignKey(TipoServicio, on_delete=models.CASCADE)
     PENDIENTE= "P"
     RECHAZADO= "R"

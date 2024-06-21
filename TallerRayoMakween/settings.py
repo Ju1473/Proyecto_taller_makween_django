@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +30,7 @@ SECRET_KEY = 'django-insecure-$3ndiow*$spzlciv@+(x+s(91#yu+2)0ms8y!om(5ckzphd23m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']
 
 #Para probar la pagina 404
 #DEBUG = False
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'admin_interface',
     'colorfield',
     'admin_confirm',
+    'multi_captcha_admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +58,7 @@ INSTALLED_APPS = [
     'axes',
     'captcha',
     'django_recaptcha',
+    'cloudinary',
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
@@ -65,6 +70,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # RECAPTCHA
 RECAPTCHA_PUBLIC_KEY = '6LekLfcpAAAAAPkRH764CYWWw5od-gMh6CMZhokV'
 RECAPTCHA_PRIVATE_KEY = '6LekLfcpAAAAAIbZewBfjrqKtcAo2iwqD4ENnbD7'
+
+# RECUPERACIÓN DE CONTRASEÑAS
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'
 
 # CONFIG AXES
 
@@ -88,10 +103,12 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    #'multi_captcha_admin.middleware.MultiCaptchaAdminMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # AXES
@@ -178,6 +195,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# python manage.py collectstatic --upload-unhashed-files
+
+# CONFIG CLOUDINARY
+cloudinary.config(
+    cloud_name = 'dn5a2ljrd',
+    api_key = '239386824515236',
+    api_secret = 'xn1MNFyaJhRTu9Z1MjAApWr49DY'
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

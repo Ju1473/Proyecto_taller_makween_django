@@ -46,6 +46,9 @@ urlpatterns = [
     path('limpiar_carrito/<str:usuario>/', limpiar_carrito, name='limpiar_carrito'),
     path('carrito/', carrito, name="carrito"),
     path('procesar_pago/', procesar_pago, name="procesar_pago"),
+    path('historial_pago/', historial_pago, name="historial_pago"),
     # APIs
     path('api/', include(router.urls)),
+    path('mecanicosapi/', mecanicosapi, name="mecanicosapi"),
+    path('mecanicodetalle/<id>/', mecanicodetalle, name="mecanicodetalle"),
 ]
