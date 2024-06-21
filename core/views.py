@@ -15,6 +15,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 import json
 import requests
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from io import BytesIO
 # Create your views here.
 
 # APIS
@@ -538,10 +544,72 @@ def procesar_pago(request):
 @login_required
 def historial_pago(request):
     user = request.user
-    user_info = {'user': user}
-    pagos = Pago_reserva.objects.filter(usuario=user_info['user'])
+    pagos = Pago_reserva.objects.filter(usuario=user.username)
+    
+    # Preparar los datos a mostrar en la plantilla
+    pagos_info = []
+    for pago in pagos:
+        detalle_pago = pago.detalle_pago
+        total = detalle_pago.get('transactions', [{}])[0].get('amount', {}).get('total', 'N/A')
+        payer_info = detalle_pago.get('payer', {}).get('payer_info', {})
+        nombre = payer_info.get('first_name', 'N/A') + ' ' + payer_info.get('last_name', 'N/A')
+        email = payer_info.get('email', 'N/A')
+        
+        pagos_info.append({
+            'id': pago.id,
+            'usuario': pago.usuario,
+            'id_pago': pago.id_pago,
+            'fecha': pago.fecha,
+            'total': total,
+            'nombre': nombre,
+            'email': email
+        })
+    
     aux = {
-        'lista' : pagos
+        'lista': pagos_info
     }
 
     return render(request, 'core/historial_pago.html', aux)
+
+@login_required
+def generar_pdf_voucher(request, id):
+    user = request.user
+    pago_info = Pago_reserva.objects.get(id=id, usuario=user.username)
+
+    detalle_pago = pago_info.detalle_pago
+    total = detalle_pago.get('transactions', [{}])[0].get('amount',{}).get('total', 'N/A')
+    payer_info = detalle_pago.get('payer',{}).get('payer_info',{})
+    email =payer_info.get('email', 'N/A')
+    nombre = payer_info.get('first_name', 'N/A') + ' ' + payer_info.get('last_name', 'N/A') 
+    id_cart_p = detalle_pago.get('cart', 'N/A')
+    cod_pais = payer_info.get('country_code', 'N/A')
+    cod_postal = payer_info.get('shipping_address',{}).get('postal_code', 'N/A')
+
+
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    styles = getSampleStyleSheet()
+    story = []
+
+
+    story.append(Paragraph(f'ID Pago: {pago_info.id_pago}', styles['Title']))
+    story.append(Paragraph(f'ID Pagador: {pago_info.id_pagador}', styles['BodyText']))
+    story.append(Paragraph(f'TOKEN: {pago_info.token_pago}', styles['BodyText']))
+    story.append(Paragraph(f'ID Carrito: {id_cart_p}', styles['BodyText']))
+    story.append(Paragraph(f'Nombre: {nombre}', styles['BodyText']))
+    story.append(Paragraph(f'Email: {email}', styles['BodyText']))
+    story.append(Paragraph(f'Fecha Pago: {pago_info.fecha}', styles['BodyText']))
+    story.append(Paragraph(f'Codigo Pais: {cod_pais}', styles['BodyText']))
+    story.append(Paragraph(f'Codigo Postal: {cod_postal}', styles['BodyText']))
+    story.append(Paragraph(f'Total: {total}', styles['BodyText']))
+
+    doc.build(story)
+
+    buffer.seek(0)
+
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="voucher_{pago_info.id}.pdf"'
+
+    return response
+
+

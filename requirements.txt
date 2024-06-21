@@ -13,4 +13,5 @@ django-multi-captcha-admin
 requests
 cloudinary
 whitenoise
+reportlab
 #pip install -r requirements.txt
