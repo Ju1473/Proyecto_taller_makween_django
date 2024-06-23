@@ -17,7 +17,7 @@ class Mecanico(models.Model):
     apellido_mecanico = models.CharField(max_length=50)
     correo_mecanico = models.CharField(max_length=50)
     password_mecanico = models.CharField(max_length=50)
-    foto_mecanico = CloudinaryField('imagen')
+    foto_mecanico = CloudinaryField('imagen', folder='mecanicos')
     cant_mantenciones_mec = models.IntegerField(default=0)
 
     def __str__(self):
@@ -44,7 +44,7 @@ class Trabajo(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     mecanico = models.ForeignKey(Mecanico, on_delete=models.CASCADE)
     materiales = models.CharField(max_length=50)
-    foto = CloudinaryField('imagen')
+    foto = CloudinaryField('imagen', folder='trabajos')
     servicio = models.ForeignKey(TipoServicio, on_delete=models.CASCADE)
     PENDIENTE= "P"
     RECHAZADO= "R"

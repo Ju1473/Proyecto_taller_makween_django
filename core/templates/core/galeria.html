@@ -15,7 +15,7 @@
 <div class="container-fluid pt-3 mx-1 text-center">
     {% for aux in page_obj %}
         {% if aux.estado_publicacion == "A" %}
-            <a href="{% url 'trabajo' aux.id %}" class=""><img class="" src="../../../media/{{ aux.foto }}" alt="" width="300" height="300"></a>
+            <a href="{% url 'trabajo' aux.id %}" class=""><img class="" src="{{ aux.foto.url }}" alt="" width="300" height="300"></a>
         {% endif %}
     {% endfor %}
 </div>
