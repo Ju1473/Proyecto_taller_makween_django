@@ -1,4 +1,5 @@
 from .models import *
+from .funciones import miindicadorAPI
 
 def user_info(request):
     user_info = {}
@@ -31,11 +32,15 @@ def carrito_de_compras(request):
 
     total_car = carrito.total_carrito if carrito else 0
     formatted_total_car = "{:.2f}".format(total_car)
+    clpcart = total_car * miindicadorAPI(indicador='dolar')
+    dolar = miindicadorAPI(indicador='dolar')
 
     context = {
         'carrito': carrito,
         'total_car': total_car,
+        'precio_clp': clpcart,
         'format_total_car': formatted_total_car,
+        'dolar' : dolar,
     }
 
     return context

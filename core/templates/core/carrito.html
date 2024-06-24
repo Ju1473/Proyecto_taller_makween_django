@@ -22,7 +22,7 @@
             <div class="team-item">
                 <div class="text-center p-4" style="background-color: rgb(187, 187, 187);">
                     <h5 class="fw-bold mb-0">Pruebas de diagnóstico</h5>
-                    <small>Precio: $ 2.50 USD</small>
+                    <small>Precio: $ {{ precio1 }} CLP</small>
                     <br>
                 </div>
             </div>
@@ -34,7 +34,7 @@
             <div class="team-item">
                 <div class="text-center p-4" style="background-color: rgb(187, 187, 187);">
                     <h5 class="fw-bold mb-0">Mantención de Motores</h5>
-                    <small>Precio: $ 10.00 USD</small>
+                    <small>Precio: $ {{ precio2 }} CLP</small>
                     <br>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             <div class="team-item">
                 <div class="text-center p-4" style="background-color: rgb(187, 187, 187);">
                     <h5 class="fw-bold mb-0">Reemplazo de neumáticos</h5>
-                    <small>Precio: $ 8.50 USD</small>
+                    <small>Precio: $ {{ precio3 }} CLP</small>
                     <br>
                 </div>
             </div>
@@ -58,7 +58,7 @@
             <div class="team-item">
                 <div class="text-center p-4" style="background-color: rgb(187, 187, 187);">
                     <h5 class="fw-bold mb-0">Cambio de aceite</h5>
-                    <small>Precio: $ 5.50 USD</small>
+                    <small>Precio: $ {{ precio4 }} CLP</small>
                     <br>
                 </div>
             </div>
@@ -70,7 +70,7 @@
 
         <div class="text-center">
             {% if total_car > 0 %}
-            <p class="text-center">Total del carrito: ${{ total_car }} USD</p>
+            <p class="text-center">Total del carrito: ${{ precio_clp }} CLP</p>
             <div style="justify-content: center;" class="text-center" id="paypal-button"></div>
             <form method="POST" action="{% url 'limpiar_carrito' user.username %}">
                 {% csrf_token %}

@@ -21,6 +21,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from io import BytesIO
+from .funciones import miindicadorAPI
 # Create your views here.
 
 # APIS
@@ -427,15 +428,44 @@ def clientes(request):
 
 @login_required
 def res_servicios(request):
-    return render(request, 'core/res_servicios.html')
+    precio1 = miindicadorAPI(indicador='dolar') * 2.5
+    precio2 = miindicadorAPI(indicador='dolar') * 10
+    precio3 = miindicadorAPI(indicador='dolar') * 8.5
+    precio4 = miindicadorAPI(indicador='dolar') * 5.5
+    aux = {
+        'precio1' : precio1,
+        'precio2' : precio2,
+        'precio3' : precio3,
+        'precio4' : precio4,
+    }
+    return render(request, 'core/res_servicios.html', aux)
 
 @login_required
 def carrito(request):
-
-    return render(request, 'core/carrito.html')
+    precio1 = miindicadorAPI(indicador='dolar') * 2.5
+    precio2 = miindicadorAPI(indicador='dolar') * 10
+    precio3 = miindicadorAPI(indicador='dolar') * 8.5
+    precio4 = miindicadorAPI(indicador='dolar') * 5.5
+    aux = {
+        'precio1' : precio1,
+        'precio2' : precio2,
+        'precio3' : precio3,
+        'precio4' : precio4,
+    }
+    return render(request, 'core/carrito.html', aux)
 
 @login_required
 def agregar_carrito(request, usuario, servicio):
+    precio1 = miindicadorAPI(indicador='dolar') * 2.5
+    precio2 = miindicadorAPI(indicador='dolar') * 10
+    precio3 = miindicadorAPI(indicador='dolar') * 8.5
+    precio4 = miindicadorAPI(indicador='dolar') * 5.5
+    aux = {
+        'precio1' : precio1,
+        'precio2' : precio2,
+        'precio3' : precio3,
+        'precio4' : precio4,
+    }
     if request.method == "POST":
         servicio_nombre = f'servicio_{servicio}'
         
@@ -445,7 +475,7 @@ def agregar_carrito(request, usuario, servicio):
         carrito_obj.actualizar_total()
         carrito_obj.save()
 
-        return render(request, 'core/res_servicios.html', {'carrito': carrito_obj})
+        return render(request, 'core/res_servicios.html', aux)
     
     return render(request, 'core/res_servicios.html')
 
