@@ -43,13 +43,15 @@ class ClienteForm(ModelForm):
         fields = ['nombre_cliente', 'apellido_cliente', 'correo_cliente']
 
 class CustomUserCreationForm(UserCreationForm):
-
+    captcha = CaptchaField()
+    
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
 class CustomAuthentication(AuthenticationForm):
-
+    captcha = CaptchaField()
+    
     class Meta:
         model = User
         fields = ['username', 'password1']
@@ -68,7 +70,8 @@ class ContactoForm(ModelForm):
         }
 
 class TrabajoAdminForm(ModelForm):
-
+    captcha = CaptchaField()
+    
     class Meta:
         model = Trabajo
         fields = ['nombre_trabajo', 'diagnostico', 'mecanico', 'materiales', 'foto', 'servicio', 'estado_publicacion', 'comentario_admin', 'cliente']
