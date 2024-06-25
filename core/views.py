@@ -67,7 +67,7 @@ class ReservaViewset(viewsets.ModelViewSet):
 
 # CONSUMO DE APIS
 def mecanicosapi(request):
-    response = requests.get('http://127.0.0.1:8000/api/mecanico/')
+    response = requests.get('https://proyecto-taller-makween-django.vercel.app/api/mecanico/')
     mecanicos = response.json()
     aux = {
         'lista' : mecanicos
@@ -76,7 +76,7 @@ def mecanicosapi(request):
     return render(request, 'core/mecanicos/crudapi/listar.html', aux)
 
 def mecanicodetalle(request, id):
-    response = requests.get(f'http://127.0.0.1:8000/api/mecanico/{id}/')
+    response = requests.get(f'https://proyecto-taller-makween-django.vercel.app/api/mecanico/{id}/')
     mecanico = response.json()
 
     return render(request, 'core/mecanicos/crudapi/detalle.html', {'mecanico' : mecanico})
