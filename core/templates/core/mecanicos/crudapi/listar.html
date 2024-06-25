@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block contenido %}
-<h3>Lista de mecánicos</h3>
+<h3>Lista de mecánicos API</h3>
 <br>
 {% for aux in lista %}
 <div class="preview-item border-bottom">
@@ -16,6 +16,7 @@
         <div class="mr-auto text-sm-right pt-2 pt-sm-0">
             <a href="{% url 'mecanicodetalle' aux.id %}" class="btn btn-warning">Ver detalle</a>
         </div>
+        <br>
     </div>
 </div>
 <br>
