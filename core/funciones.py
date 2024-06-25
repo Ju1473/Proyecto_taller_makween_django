@@ -22,3 +22,10 @@ def miindicadorAPI(indicador):
     valor = moneda.get('serie', [{}])[0].get('valor')
 
     return valor
+
+def paisAPI(code):
+    response = requests.get('https://country.io/names.json')
+    paises = response.json()
+    nom_pais = paises.get(code)
+
+    return nom_pais

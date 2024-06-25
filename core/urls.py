@@ -48,6 +48,7 @@ urlpatterns = [
     path('procesar_pago/', procesar_pago, name="procesar_pago"),
     path('historial_pago/', historial_pago, name="historial_pago"),
     path('generar_pdf_voucher/<int:id>/',generar_pdf_voucher, name='generar_pdf_voucher'),
+    path('voucher/<id>/', voucher, name="voucher"),
     # APIs
     path('api/', include(router.urls)),
     path('mecanicosapi/', mecanicosapi, name="mecanicosapi"),

@@ -21,7 +21,7 @@
                 <tbody>
                     {% for aux in lista %}
                     <tr>
-                        <td>{{ aux.id }}</td>
+                        <td><a href="{% url 'voucher' aux.id %}">{{ aux.id }}</a></td>
                         <td>{{ aux.usuario }}</td>
                         <td>{{ aux.id_pago }}</td>
                         <td>{{ aux.fecha|date:"SHORT_DATE_FORMAT" }}</td>

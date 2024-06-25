@@ -21,7 +21,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from io import BytesIO
-from .funciones import miindicadorAPI
+from .funciones import miindicadorAPI, paisAPI
 # Create your views here.
 
 # APIS
@@ -613,6 +613,7 @@ def generar_pdf_voucher(request, id):
     nombre = payer_info.get('first_name', 'N/A') + ' ' + payer_info.get('last_name', 'N/A') 
     id_cart_p = detalle_pago.get('cart', 'N/A')
     cod_pais = payer_info.get('country_code', 'N/A')
+    pais = paisAPI(cod_pais)
     cod_postal = payer_info.get('shipping_address',{}).get('postal_code', 'N/A')
 
 
@@ -630,8 +631,9 @@ def generar_pdf_voucher(request, id):
     story.append(Paragraph(f'Email: {email}', styles['BodyText']))
     story.append(Paragraph(f'Fecha Pago: {pago_info.fecha}', styles['BodyText']))
     story.append(Paragraph(f'Codigo Pais: {cod_pais}', styles['BodyText']))
+    story.append(Paragraph(f'Pais: {pais}', styles['BodyText']))
     story.append(Paragraph(f'Codigo Postal: {cod_postal}', styles['BodyText']))
-    story.append(Paragraph(f'Total: {total}', styles['BodyText']))
+    story.append(Paragraph(f'Total: {total} USD', styles['BodyText']))
 
     doc.build(story)
 
@@ -642,4 +644,34 @@ def generar_pdf_voucher(request, id):
 
     return response
 
+def voucher(request, id):
+    user = request.user
+    pago_info = Pago_reserva.objects.get(id=id, usuario=user.username)
 
+    detalle_pago = pago_info.detalle_pago
+    total = detalle_pago.get('transactions', [{}])[0].get('amount',{}).get('total', 'N/A')
+    payer_info = detalle_pago.get('payer',{}).get('payer_info',{})
+    email =payer_info.get('email', 'N/A')
+    nombre = payer_info.get('first_name', 'N/A') + ' ' + payer_info.get('last_name', 'N/A') 
+    id_cart_p = detalle_pago.get('cart', 'N/A')
+    cod_pais = payer_info.get('country_code', 'N/A')
+    pais = paisAPI(cod_pais)
+    cod_postal = payer_info.get('shipping_address',{}).get('postal_code', 'N/A')
+
+
+    aux = {
+        'id': pago_info.id,
+        'usuario': pago_info.usuario,
+        'id_pago': pago_info.id_pago,
+        'id_token' : pago_info.token_pago,
+        'fecha': pago_info.fecha,
+        'nombre': nombre,
+        'email': email,
+        'id_carrito' : id_cart_p,
+        'cod_pais' : cod_pais,
+        'pais' : pais,
+        'cod_postal' : cod_postal,
+        'total': total
+    }
+
+    return render(request, 'core/voucher.html', aux)
