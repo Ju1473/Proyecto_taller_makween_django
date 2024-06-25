@@ -14,32 +14,35 @@ class TrabajoModelAdmin(AdminConfirmMixin, ModelAdmin):
 
 class ClienteModelAdmin(AdminConfirmMixin, ModelAdmin):
         confirm_change = True
-        confirmation_fields = ['nombre_cliente', 'apellido_mecanico', 'correo_mecanico', 'password_mecanico', 'foto_mecanico']
+        confirmation_fields = ['nombre_cliente', 'apellido_cliente', 'correo_cliente', 'cant_mantenciones_cli']
+
+class TipoConsultaAdmin(AdminConfirmMixin, ModelAdmin):
+        confirm_change = True
+        confirmation_fields = ['descripcion']
+
+class ContactoModelAdmin(AdminConfirmMixin, ModelAdmin):
+        confirm_change = True
+        confirmation_fields = ['nombre_apellido', 'email_contacto', 'telefono', 'consulta', 'info_adicional']
 
 class MecanicoModelAdmin(AdminConfirmMixin, ModelAdmin):
         confirm_change = True
-        confirmation_fields = ['nombre_mecanico', 'apellido_mecanico', 'correo_mecanico', 'password_mecanico', 'foto_mecanico']
+        confirmation_fields = ['nombre_mecanico', 'apellido_mecanico', 'correo_mecanico', 'password_mecanico', 'foto_mecanico', 'cant_mantenciones_mec']
 
-class MecanicoModelAdmin(AdminConfirmMixin, ModelAdmin):
+class CarritoModelAdmin(AdminConfirmMixin, ModelAdmin):
         confirm_change = True
-        confirmation_fields = ['nombre_mecanico', 'apellido_mecanico', 'correo_mecanico', 'password_mecanico', 'foto_mecanico']
+        confirmation_fields = ['usuario', 'servicio_1', 'servicio_2', 'servicio_3', 'servicio_4', 'total_carrito']
 
-class MecanicoModelAdmin(AdminConfirmMixin, ModelAdmin):
+class PagoReservaModelAdmin(AdminConfirmMixin, ModelAdmin):
         confirm_change = True
-        confirmation_fields = ['nombre_mecanico', 'apellido_mecanico', 'correo_mecanico', 'password_mecanico', 'foto_mecanico']
-
-class MecanicoModelAdmin(AdminConfirmMixin, ModelAdmin):
-        confirm_change = True
-        confirmation_fields = ['nombre_mecanico', 'apellido_mecanico', 'correo_mecanico', 'password_mecanico', 'foto_mecanico']
-
+        confirmation_fields = ['usuario', 'id_pago', 'id_pagador', 'token_pago', 'detalle_pago']
 
 # Register your models here.
 admin.site.register(TipoServicio, TipoServicioModelAdmin)
 admin.site.register(Trabajo, TrabajoModelAdmin)
-admin.site.register(Cliente)
-admin.site.register(TipoConsulta)
-admin.site.register(Contacto)
+admin.site.register(Cliente, ClienteModelAdmin)
+admin.site.register(TipoConsulta, TipoConsultaAdmin)
+admin.site.register(Contacto, ContactoModelAdmin)
 admin.site.register(Mecanico, MecanicoModelAdmin)
 admin.site.register(Reserva)
-admin.site.register(Carrito)
-admin.site.register(Pago_reserva)
+admin.site.register(Carrito, CarritoModelAdmin)
+admin.site.register(Pago_reserva, PagoReservaModelAdmin)
