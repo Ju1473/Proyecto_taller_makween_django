@@ -438,10 +438,10 @@ def clientes(request):
 
 @login_required
 def res_servicios(request):
-    precio1 = ROUND(miindicadorAPI(indicador='dolar') * 2.5)
-    precio2 = ROUND(miindicadorAPI(indicador='dolar') * 10)
-    precio3 = ROUND(miindicadorAPI(indicador='dolar') * 8.5)
-    precio4 = ROUND(miindicadorAPI(indicador='dolar') * 5.5)
+    precio1 = round(miindicadorAPI(indicador='dolar') * 2.5)
+    precio2 = round(miindicadorAPI(indicador='dolar') * 10)
+    precio3 = round(miindicadorAPI(indicador='dolar') * 8.5)
+    precio4 = round(miindicadorAPI(indicador='dolar') * 5.5)
     aux = {
         'precio1' : precio1,
         'precio2' : precio2,
@@ -452,10 +452,10 @@ def res_servicios(request):
 
 @login_required
 def carrito(request):
-    precio1 = ROUND(miindicadorAPI(indicador='dolar') * 2.5)
-    precio2 = ROUND(miindicadorAPI(indicador='dolar') * 10)
-    precio3 = ROUND(miindicadorAPI(indicador='dolar') * 8.5)
-    precio4 = ROUND(miindicadorAPI(indicador='dolar') * 5.5)
+    precio1 = round(miindicadorAPI(indicador='dolar') * 2.5)
+    precio2 = round(miindicadorAPI(indicador='dolar') * 10)
+    precio3 = round(miindicadorAPI(indicador='dolar') * 8.5)
+    precio4 = round(miindicadorAPI(indicador='dolar') * 5.5)
     aux = {
         'precio1' : precio1,
         'precio2' : precio2,
@@ -466,10 +466,10 @@ def carrito(request):
 
 @login_required
 def agregar_carrito(request, usuario, servicio):
-    precio1 = ROUND(miindicadorAPI(indicador='dolar') * 2.5)
-    precio2 = ROUND(miindicadorAPI(indicador='dolar') * 10)
-    precio3 = ROUND(miindicadorAPI(indicador='dolar') * 8.5)
-    precio4 = ROUND(miindicadorAPI(indicador='dolar') * 5.5)
+    precio1 = round(miindicadorAPI(indicador='dolar') * 2.5)
+    precio2 = round(miindicadorAPI(indicador='dolar') * 10)
+    precio3 = round(miindicadorAPI(indicador='dolar') * 8.5)
+    precio4 = round(miindicadorAPI(indicador='dolar') * 5.5)
     aux = {
         'precio1' : precio1,
         'precio2' : precio2,
