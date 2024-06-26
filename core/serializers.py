@@ -52,4 +52,14 @@ class ReservaSerializers(serializers.ModelSerializer):
         model = Reserva
         fields = '__all__'
 
+class PagoReservaSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Pago_reserva
+        fields = '__all__'
+
+class CarritoSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Carrito
+        fields = '__all__'
+
 
