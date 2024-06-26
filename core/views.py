@@ -65,6 +65,16 @@ class ReservaViewset(viewsets.ModelViewSet):
 	serializer_class = ReservaSerializers
 	renderer_classes = [JSONRenderer]
 
+class PagoReservaViewset(viewsets.ModelViewSet):
+	queryset = Pago_reserva.objects.all()
+	serializer_class = PagoReservaSerializers
+	renderer_classes = [JSONRenderer]
+
+class CarritoViewset(viewsets.ModelViewSet):
+	queryset = Carrito.objects.all()
+	serializer_class = CarritoSerializers
+	renderer_classes = [JSONRenderer]
+
 # CONSUMO DE APIS
 def mecanicosapi(request):
     response = requests.get('https://proyecto-taller-makween-django.vercel.app/api/mecanico/')
