@@ -29,5 +29,6 @@
     <li>TOTAL: {{ total }} USD</li>
 </ul>
 <button class="btn btn-primary no-print" onclick="window.print()">Imprimir</button>
+<a href="{% url 'generar_pdf_voucher' id %}" class="btn btn-success no-print">Generar PDF</a>
 <button class="btn btn-secondary no-print" onclick="window.history.back()">Volver</button>
 {% endblock %}
