@@ -11,6 +11,8 @@ router.register('estadotrabajo', EstadoTrabajoViewset)
 router.register('tipoconsultas', TipoConsultasViewset)
 router.register('contacto', ContactoViewset)
 router.register('reserva', ReservaViewset)
+router.register('pago_reserva', PagoReservaViewset)
+router.register('carrito', CarritoViewset)
 
 urlpatterns = [
     path('', index, name="index"),
