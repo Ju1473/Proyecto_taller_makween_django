@@ -32,7 +32,7 @@ def carrito_de_compras(request):
 
     total_car = carrito.total_carrito if carrito else 0
     formatted_total_car = "{:.2f}".format(total_car)
-    clpcart = total_car * miindicadorAPI(indicador='dolar')
+    clpcart = round(total_car * miindicadorAPI(indicador='dolar'))
     dolar = miindicadorAPI(indicador='dolar')
 
     context = {
